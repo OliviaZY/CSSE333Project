@@ -33,5 +33,12 @@ public class DatabaseConnecter {
 	public Connection getConnection(){
 		return con;
 	}
+	public void closeConnection(){
+		try {
+			con.close();
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+	}
 	
 }

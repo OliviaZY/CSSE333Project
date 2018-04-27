@@ -1,37 +1,81 @@
-import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class MainClass {
+	static JLabel l1;
+	static JLabel l2;
+	static JLabel l3;
+	static JTextField tf1;
+	static JButton btn1;
+	static JButton btn2;
+	static JPasswordField p1;
+	static DatabaseConnecter dbc = new DatabaseConnecter();
+		 public static void logIn() {	
+
+		  
+		  JFrame frame = new JFrame("Login Form");
+		  l1 = new JLabel("Login Form");
+		  l1.setForeground(Color.blue);
+		  l1.setFont(new Font("Serif", Font.BOLD, 20));
+		 
+		  l2 = new JLabel("Username");
+		  l3 = new JLabel("Password");
+		  tf1 = new JTextField();
+		  p1 = new JPasswordField();
+		  btn1 = new JButton("Login");
+		  btn2 = new JButton("Register");
+		  
+		 
+		  l1.setBounds(100, 30, 400, 30);
+		  l2.setBounds(80, 70, 200, 30);
+		  l3.setBounds(80, 110, 200, 30);
+		  tf1.setBounds(300, 70, 200, 30);
+		  p1.setBounds(300, 110, 200, 30);
+		  btn1.setBounds(150, 160, 100, 30);
+		  btn2.setBounds(300, 160, 100, 30);
+		 
+		  frame.add(l1);
+		  frame.add(l2);
+		  frame.add(tf1);
+		  frame.add(l3);
+		  frame.add(p1);
+		  frame.add(btn1);
+		  frame.add(btn2);
+		 
+		  frame.setSize(800, 800);
+		  frame.setLayout(null);
+		  frame.setVisible(true);
+		  String uname = tf1.getText();
+		  String pass = p1.getText();
+		  btn1.addActionListener(new LogInListener(tf1, p1, frame,dbc.getConnection()));
+		  btn2.addActionListener(new RegisterListener(tf1, p1, frame,dbc.getConnection()));
+		  System.out.println(uname);
+//		  actionPerformed(null);
+		 }
+		// public void actionPerformed1(ActionEvent ae)
+//		public static void actionPerformed(ActionEvent arg0) {
+//			String uname = l1.getText();
+//		    String pass = p1.getText();
+//		    
+//			
+//		}
 
 	public static void main(String[] args) {
 		//Establishes the database connection
-		DatabaseConnecter dbc = new DatabaseConnecter();
-		
-		//TODO: Clean this up/move it out of main? It's here now because I (Joanna) wanted to throw something together fast
-		JFrame frame1 = new JFrame();
-		frame1.setSize(1000, 1000);
-		//This is the panel that's going to change when you click the link
-		JPanel changingPanel = new MainPagePosts();
-		//Link buttons on the left side of the screen
-		Box links = Box.createVerticalBox();
-		JButton[] buttonLinks = new JButton[5];
-		buttonLinks[0] = new JButton("Profile");
-		buttonLinks[1] = new JButton("Friends");
-		buttonLinks[2] = new JButton("Reminders");
-		buttonLinks[3] = new JButton("Events");
-		buttonLinks[4] = new JButton("Intrests");
-		for (JButton j:buttonLinks){
-			links.add(j);
-		}
-				
-		frame1.add(changingPanel, BorderLayout.CENTER);
-		frame1.add(links, BorderLayout.WEST);
-		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame1.setVisible(true);
+		logIn();
 	}
-
+	
+	
 }
+		
+		
+		
+	
+
+
