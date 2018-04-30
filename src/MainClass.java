@@ -16,8 +16,8 @@ public class MainClass {
 	static JButton btn2;
 	static JPasswordField p1;
 	static DatabaseConnecter dbc = new DatabaseConnecter();
+	
 		 public static void logIn() {	
-
 		  
 		  JFrame frame = new JFrame("Login Form");
 		  l1 = new JLabel("Login Form");
@@ -56,15 +56,8 @@ public class MainClass {
 		  btn1.addActionListener(new LogInListener(tf1, p1, frame,dbc.getConnection()));
 		  btn2.addActionListener(new RegisterListener(tf1, p1, frame,dbc.getConnection()));
 		  System.out.println(uname);
-//		  actionPerformed(null);
+
 		 }
-		// public void actionPerformed1(ActionEvent ae)
-//		public static void actionPerformed(ActionEvent arg0) {
-//			String uname = l1.getText();
-//		    String pass = p1.getText();
-//		    
-//			
-//		}
 
 	public static void main(String[] args) {
 		//Establishes the database connection

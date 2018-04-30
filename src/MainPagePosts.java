@@ -9,11 +9,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MainPagePosts extends JPanel {
-	Connection c;
-	ResultSet rs;
+	Connection c = null;
+	ResultSet rs = null;
 	ArrayList<JPanel> tempP;
 	
-	public MainPagePosts(Connection dbc){
+	public MainPagePosts(Connection c){
+		this.c = c;
 		tempP = postsView();
 		for(int i = 0; i < tempP.size(); i++){
 			this.add(tempP.get(i));
@@ -29,7 +30,7 @@ public class MainPagePosts extends JPanel {
 		}
 		
 		sqlStatement = sqlStatement + "ORDER BY po.Date DESC LIMIT 10;\n";
-		
+
 		return sqlStatement;
 	}
 	
@@ -49,8 +50,6 @@ public class MainPagePosts extends JPanel {
 				tempP.add(view);
 			}
 		} catch (SQLException ex) {
-			JOptionPane.showMessageDialog(null,
-					"An error ocurred while retrieving sodas by restaurants. See printed stack trace.");
 			ex.printStackTrace();
 		}
 		
@@ -65,7 +64,7 @@ public class MainPagePosts extends JPanel {
 		System.out.println(query);
 		PreparedStatement stmt = null;
 		try {
-			stmt = c.prepareCall(query);
+			stmt = c.prepareStatement(query);
 			tempRS = stmt.executeQuery();
 		} catch (SQLException e) {
 			System.out.println(e);
