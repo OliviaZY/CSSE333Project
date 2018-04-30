@@ -55,12 +55,13 @@ public class RegisterListener implements ActionListener {
 			cs.execute();
 			ResultSet rs = cs.getResultSet();
 			// ResultSet rs = cs.executeQuery();
-			if (rs.next()) {
-				if (rs.getInt(3) == 1) {
+//			if (rs.next()) {
+			int ret = cs.getInt(3);
+			if (ret == 1) {
 					JOptionPane.showMessageDialog(null, "ERROR: user name cannot be empty");
-				} else if (rs.getInt(3) == 2) {
+				} else if (ret == 2) {
 					JOptionPane.showMessageDialog(null, "ERROR: password cannot be empty.");
-				} else if (rs.getInt(3) == 3) {
+				} else if (ret == 3) {
 					JOptionPane.showMessageDialog(null, "ERROR: user already existed.");
 				} else {
 					frame.repaint();
@@ -107,7 +108,7 @@ public class RegisterListener implements ActionListener {
 					frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					frame1.setVisible(true);
 				}
-			}
+//			}
 		} catch (
 
 		SQLException e) {
