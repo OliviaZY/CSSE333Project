@@ -8,8 +8,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Random;
@@ -53,32 +51,31 @@ public class LogInListener implements ActionListener {
 		frame.repaint();
 	    frame.revalidate();
 
-	    String query = "select * from person where UserName=?;";
-		PreparedStatement stmt;
-	    CallableStatement cs = null;
+		CallableStatement cs = null;
+
 		try {
-			stmt = this.dbc.prepareStatement(query);
-			stmt.setString(1, tf1.getText());
-			System.out.println(tf1.getText());
-			System.out.println(stmt);
-			ResultSet rs = stmt.executeQuery();
-//			System.out.println(1);
-			if(rs.next()){
-				byte[] salt = rs.getBytes(2);
-//				System.out.println(rs.getString(1));
-//				System.out.println(rs.getString(3));
-//				System.out.println(salt);
-//				String storedHash = rs.getString(3);
-//				String StoredPassword = this.hashPassword(salt, getStringFromBytes(salt));
-				if(!this.p1.getText().equals(rs.getString(3))){
-//				if (!this.hashPassword(salt, password).equals(storedHash)){
-					JOptionPane.showMessageDialog(null, "Incorrect username or password. please try again");
-				}else{
+			cs = this.dbc.prepareCall("call Login(?,?,?)");
+			cs.setString(1, tf1.getText());
+			cs.setString(2, p1.getText());
+			cs.registerOutParameter(3, java.sql.Types.INTEGER);
+			System.out.println(cs);
+			cs.execute();
+//			ResultSet rs = cs.getResultSet();
+			int ret = cs.getInt(3);
+			if (ret == 1) {
+				JOptionPane.showMessageDialog((Component)null, "ERROR: user name cannot be empty");
+			} else if (ret == 2) {
+				JOptionPane.showMessageDialog((Component)null, "ERROR: password cannot be empty.");
+			} else if (ret == 3) {
+				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect user name or password.");
+			} else if(ret == 4){
+				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect user name or password.");
+			}else{
 					JFrame frame1 = new JFrame();
 					frame1.setSize(1000, 1000);
 					//This is the panel that's going to change when you click the link
 					JPanel changingPanel = new MainPagePosts(dbc);
-					
+
 					//Link buttons on the left side of the screen
 					Box links = Box.createVerticalBox();
 					JButton[] buttonLinks = new JButton[5];
@@ -101,11 +98,7 @@ public class LogInListener implements ActionListener {
 					frame1.setVisible(true);
 				}
 				
-			}else{
-				JOptionPane.showMessageDialog(null, "Incorrect username or password. please try again");
-			}
-			
-		} catch (SQLException exception) {
+			}catch (SQLException exception) {
 			// TODO Auto-generated catch-block stub.
 			exception.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Login Failed");

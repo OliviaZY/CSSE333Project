@@ -54,7 +54,7 @@ public class RegisterListener implements ActionListener {
 			System.out.println(cs);
 			cs.execute();
 			ResultSet rs = cs.getResultSet();
-			// ResultSet rs = cs.executeQuery();
+//			 ResultSet rs = cs.executeQuery();
 //			if (rs.next()) {
 			int ret = cs.getInt(3);
 			if (ret == 1) {
