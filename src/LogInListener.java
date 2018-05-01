@@ -60,16 +60,15 @@ public class LogInListener implements ActionListener {
 			cs.registerOutParameter(3, java.sql.Types.INTEGER);
 			System.out.println(cs);
 			cs.execute();
-//			ResultSet rs = cs.getResultSet();
 			int ret = cs.getInt(3);
 			if (ret == 1) {
 				JOptionPane.showMessageDialog((Component)null, "ERROR: user name cannot be empty");
 			} else if (ret == 2) {
 				JOptionPane.showMessageDialog((Component)null, "ERROR: password cannot be empty.");
 			} else if (ret == 3) {
-				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect user name or password.");
+				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect user name.");
 			} else if(ret == 4){
-				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect user name or password.");
+				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect password.");
 			}else{
 					JFrame frame1 = new JFrame();
 					frame1.setSize(1000, 1000);

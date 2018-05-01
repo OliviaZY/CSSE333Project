@@ -7,7 +7,6 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Random;
@@ -53,7 +52,7 @@ public class RegisterListener implements ActionListener {
 			// cs.registerOutParameter(1, java.sql.Types.INTEGER);
 			System.out.println(cs);
 			cs.execute();
-			ResultSet rs = cs.getResultSet();
+//			ResultSet rs = cs.getResultSet();
 //			 ResultSet rs = cs.executeQuery();
 //			if (rs.next()) {
 			int ret = cs.getInt(3);
