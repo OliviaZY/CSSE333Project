@@ -21,7 +21,7 @@ public class addProfileListner implements ActionListener {
 	
 	static JTextField tf1;
 	static JTextField tf2;
-	static JTextField tf3;
+	JTextField tf3;
 	static JTextField tf4;
 	static JTextField tf5;
 	static JTextField tf6;
@@ -58,14 +58,14 @@ public class addProfileListner implements ActionListener {
 		  l7 = new JLabel("Profession");
 		  l8 = new JLabel("Field");
 		  
-		  tf1 = new JTextField();
-		  tf2 = new JTextField();
-		  tf3 = new JTextField("yyyy-mm-dd");
-		  tf4 = new JTextField();
-		  tf5 = new JTextField();
-		  tf6 = new JTextField();
-		  tf7 = new JTextField();
-		  tf8 = new JTextField();
+		  tf1 = new JTextField(); // first
+		  tf2 = new JTextField();			//last
+		  tf3 = new JTextField("yyyy-mm-dd");	//birth
+		  tf4 = new JTextField();			//state
+		  tf5 = new JTextField();			// college
+		  tf6 = new JTextField();			// profession
+		  tf7 = new JTextField();			//field
+//		  tf8 = new JTextField();
 		  btn1 = new JButton("Save!!!");
 		  btn2 = new JButton("Cancel, I will edit it later.");
 		  
@@ -115,7 +115,7 @@ public class addProfileListner implements ActionListener {
 		  frame.setLayout(null);
 		  frame.setVisible(true);
 		  btn1.addActionListener(new SaveProfileListener(tf1, tf2, tf3, tf4, tf5, tf6, tf7,uname, frame,dbc));
-		  btn2.addActionListener(new CancelProfileListener(uname, frame,dbc));
+		  btn2.addActionListener(new SaveProfileListener(tf1, tf2, tf3, tf4, tf5, tf6, tf7,uname, frame,dbc));
 	}
 
 }

@@ -60,7 +60,7 @@ public class ViewProfileListner implements ActionListener {
 		JButton closeConnection = new JButton("Close Connection");//THis should probably be changed to something automatic
 //		closeConnection.addActionListener(new ConnectionCloser(dbc));//but it's 3AM so that's beyond my abilites rn
 		
-			l2 = new JLabel("First Name: ");
+		  l2 = new JLabel("First Name: ");
 		  l3 = new JLabel("Last Name: ");
 		  l4 = new JLabel("Date of Birth: ");
 		  l5 = new JLabel("State: ");
