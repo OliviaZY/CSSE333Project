@@ -1,10 +1,19 @@
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
-import java.time.Clock;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class ViewProfileListner implements ActionListener {
 	private JFrame frame;
@@ -25,6 +34,7 @@ public class ViewProfileListner implements ActionListener {
 	static JLabel l13;
 	static JLabel l14;
 	static JLabel l15;
+	
 	private String uname;
 	public ViewProfileListner(String text, JFrame frame1, Connection dbc) {
 		this.frame = frame;
@@ -62,6 +72,7 @@ public class ViewProfileListner implements ActionListener {
 		  l6 = new JLabel("College: ");
 		  l7 = new JLabel("Profession: ");
 		  l8 = new JLabel("Field: ");
+		  JButton editProdile = new JButton("edit your profile");
 
 
 		  
@@ -82,6 +93,8 @@ public class ViewProfileListner implements ActionListener {
 		  l7.setFont(new Font("Serif", Font.BOLD, 20));
 		  l8.setForeground(Color.blue);
 		  l8.setFont(new Font("Serif", Font.BOLD, 20));
+		  editProdile.setForeground(Color.CYAN);
+		  editProdile.setFont(new Font("Serif", Font.BOLD, 20));
 
 		  l2.setBounds(80, 70, 200, 30);
 		  l3.setBounds(80, 110, 200, 30);
@@ -90,6 +103,7 @@ public class ViewProfileListner implements ActionListener {
 		  l6.setBounds(80, 230, 200, 30);
 		  l7.setBounds(80, 270, 200, 30);
 		  l8.setBounds(80, 310, 200, 30);
+		  editProdile.setBounds(600, 30,300,40);
 
 		  frame1.add(l2);
 		  frame1.add(l3);
@@ -98,6 +112,7 @@ public class ViewProfileListner implements ActionListener {
 		  frame1.add(l6);
 		  frame1.add(l7);
 		  frame1.add(l8);
+		  frame1.add(editProdile);
 
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call viewProfile(?,?,?,?,?,?,?,?,?)");
@@ -110,7 +125,7 @@ public class ViewProfileListner implements ActionListener {
 			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(8, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(9, java.sql.Types.INTEGER);
-			System.out.println(cs);
+//			System.out.println(cs);
 			cs.execute();
 			int ret = cs.getInt(9);
 			if (ret == 1) {
@@ -158,11 +173,8 @@ public class ViewProfileListner implements ActionListener {
 				}else{
 					l9 = new JLabel("       ");
 				}
-//				l12 = new JLabel(cs.getString(5));
-//				l13 = new JLabel();
-//				l14 = new JLabel();
-//				l15 = new JLabel();
-//				System.out.println(l9.getText());
+
+
 				l12.setForeground(Color.BLACK);
 			    l12.setFont(new Font("Arial", Font.BOLD, 16));
 			    l13.setForeground(Color.BLACK);
@@ -177,6 +189,7 @@ public class ViewProfileListner implements ActionListener {
 			    l10.setFont(new Font("Arial", Font.BOLD, 16));
 			    l11.setForeground(Color.BLACK);
 			    l11.setFont(new Font("Arial", Font.BOLD, 16));
+			    
 
 
 				l9.setBounds(300, 70, 200, 30);
@@ -195,6 +208,8 @@ public class ViewProfileListner implements ActionListener {
 				frame1.add(l14);
 				frame1.add(l15);
 //				frame1.add(l16);
+
+				editProdile.addActionListener(new addProfileListner(uname, frame1,dbc));
 
 			}
 

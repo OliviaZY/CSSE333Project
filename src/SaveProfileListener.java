@@ -60,7 +60,12 @@ public class SaveProfileListener implements ActionListener {
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call SaveProfile(?,?,?,?,?,?,?,?,?)");
 			cs.setString(1, uname);
-			cs.setDate(2, new Date(date1.getTime()));
+			if (sDate1 == null || sDate1.equals("yyyy-mm-dd")){
+				cs.setDate(2, null);
+			}else{
+				cs.setDate(2, new Date(date1.getTime()));
+			}
+			
 			cs.setString(3, tf4.getText());
 			cs.setString(4, tf6.getText());
 			cs.setString(5, tf5.getText());
@@ -69,10 +74,9 @@ public class SaveProfileListener implements ActionListener {
 			cs.setString(8, tf2.getText());
 			cs.registerOutParameter(9, java.sql.Types.INTEGER);
 			System.out.println(cs);
+			System.out.println("haha, iam here");
 			cs.execute();
 			int ret = cs.getInt(9);
-
-			//
 
 		} catch (SQLException e) {
 			e.printStackTrace();
