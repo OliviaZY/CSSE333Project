@@ -38,6 +38,7 @@ public class EventsPanel extends JPanel {
 	// Create Event
 	JButton createEvent;
 	// prev/next page buttons
+	// dghdlfigyo;ey 
 	JButton prev;
 	JButton next;
 	int pageNum;
@@ -73,7 +74,7 @@ public class EventsPanel extends JPanel {
 		eventGroup.add(eDateCheck);
 		eventGroup.add(eAddressCheck);
 
-		enterButton.addActionListener(new ButtonListener(p));
+		enterButton.addActionListener(new ButtonListener(this));
 		createEvent.addActionListener(new ButtonListener());
 		prev.addActionListener(new ButtonListener());
 		next.addActionListener(new ButtonListener());
@@ -288,6 +289,9 @@ public class EventsPanel extends JPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getActionCommand().equals("Enter")) {
 				currEvent = searchbox.getText();
+				while(p.getComponentCount() != 0){
+					p.remove(p.getComponent(0));
+				}
 				e = eventView();
 				
 			} else if (arg0.getActionCommand().equals("Create an event!")) {
