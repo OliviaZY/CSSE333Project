@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -22,15 +24,14 @@ import javax.swing.JTextField;
  */
 public class InterestsPanel extends JPanel {
 	Connection c = null;
+	JFrame frame;
 	JTextField aniSearch;
 	JTextField musSearch;
 	JTextField bookSearch;
 	JTextField exSearch;
 	
-	JButton aniEnterButton;
-	JButton musEnterButton;
-	JButton bookEnterButton;
-	JButton exEnterButton;
+
+	JButton newEnterButton;
 	
 	JRadioButton aniName;
 	JRadioButton aniType;
@@ -46,11 +47,13 @@ public class InterestsPanel extends JPanel {
 	JRadioButton bookName;
 	JRadioButton bookAuth;
 	
+	
+	
 	JLabel searchResults;
 	
 	
-	public InterestsPanel(Connection c){
-		
+	public InterestsPanel(Connection c,JFrame f){
+		frame = f;
 		this.c = c;
 		//Searchboxes
 		aniSearch = new JTextField("Enter an animal to search");
@@ -64,6 +67,9 @@ public class InterestsPanel extends JPanel {
 		enterButtons[1] = new JButton("SearchBooks");
 		enterButtons[2] = new JButton("SearchMusic");
 		enterButtons[3] = new JButton("SearchExercises");
+		
+		//Enter New Interest Button
+		newEnterButton = new JButton("Enter a New Interest?");
 
 		//RadioButtons that determine what you're searching
 		aniName = new JRadioButton("Search Animals by Name");
@@ -103,10 +109,15 @@ public class InterestsPanel extends JPanel {
 		musGroup.add(musYear);
 		musTitle.setSelected(true);
 		
+		
+		
 		//Adding action listeners to all the enter buttons
 		for (JButton b:enterButtons){
 			b.addActionListener(new EnterListener(b.getText()));
 		}
+		
+		//Adding action listener to the enter new button
+		newEnterButton.addActionListener(new NewEnterListener());
 
 		//adding everything to the panel
 		this.add(aniSearch);
@@ -130,6 +141,8 @@ public class InterestsPanel extends JPanel {
 		this.add(musArtist);
 		this.add(musYear);
 		this.add(musTheme);
+		
+		this.add(newEnterButton);
 		
 		this.add(searchResults,BorderLayout.PAGE_END);
 		
@@ -268,4 +281,22 @@ public class InterestsPanel extends JPanel {
 		}
 		
 	}
+	class NewEnterListener implements ActionListener{
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// Removes the panel that was there before
+			for (Component c : frame.getContentPane().getComponents()) {
+				if (c instanceof JPanel) {
+					frame.remove(c);
+				}
+			}
+			frame.add(new AddInterests(c), BorderLayout.CENTER);
+			frame.repaint();
+			frame.revalidate();
+			
+		}
+		
+	}
+	
 }

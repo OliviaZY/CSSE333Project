@@ -28,7 +28,7 @@ public class LinksListener implements ActionListener {
 		}
 		// Opens a new panel, depending on the button that was clicked
 		if (type.equals("Interests"))
-			frame.add(new InterestsPanel(c), BorderLayout.CENTER);
+			frame.add(new InterestsPanel(c,frame), BorderLayout.CENTER);
 		else if (type.equals("Events"))
 			frame.add(new EventsPanel(c));
 		else if (type.equals("Profile"))
