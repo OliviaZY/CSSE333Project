@@ -11,11 +11,13 @@ public class LinksListener implements ActionListener {
 	private String type;
 	private JFrame frame;
 	private Connection c;
+	private String userName;
 
-	public LinksListener(String link, JFrame frame, Connection con) {
+	public LinksListener(String link, JFrame frame, Connection con,String uName) {
 		type = link;
 		this.frame = frame;
 		c = con;
+		userName = uName;
 	}
 
 	@Override
@@ -28,7 +30,7 @@ public class LinksListener implements ActionListener {
 		}
 		// Opens a new panel, depending on the button that was clicked
 		if (type.equals("Interests"))
-			frame.add(new InterestsPanel(c,frame), BorderLayout.CENTER);
+			frame.add(new InterestsPanel(c,frame,userName), BorderLayout.CENTER);
 		else if (type.equals("Events"))
 			frame.add(new EventsPanel(c));
 		else if (type.equals("Profile"))

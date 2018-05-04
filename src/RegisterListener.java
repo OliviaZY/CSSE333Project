@@ -99,7 +99,7 @@ public class RegisterListener implements ActionListener {
 					// abilites rn
 					links.add(closeConnection);
 					for (JButton j : buttonLinks) {
-						j.addActionListener(new LinksListener(j.getText(), frame1, dbc));
+						j.addActionListener(new LinksListener(j.getText(), frame1, dbc,tf1.getText()));
 						links.add(j);
 					}
 					frame1.add(changingPanel, BorderLayout.CENTER);
