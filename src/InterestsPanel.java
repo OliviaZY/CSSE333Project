@@ -2,8 +2,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -26,6 +26,9 @@ public class InterestsPanel extends JPanel {
 	Connection c = null;
 	JFrame frame;
 	String username;
+	
+	String statement;
+	
 	JTextField aniSearch;
 	JTextField musSearch;
 	JTextField bookSearch;
@@ -157,39 +160,38 @@ public class InterestsPanel extends JPanel {
 	 * @return query string
 	 */
 	private String buildQuery(String str) {
-		String toReturn = "";
 		if (str.equals("SearchAnimals")){
-			toReturn = "SELECT aName, aType FROM Animal WHERE ";
+			statement = "{Call GetAnimals(?,?)}";
 			if (aniName.isSelected())
-				return toReturn + "aName = ?";
+				return "aName";
 			else //if aniType is selected
-				return toReturn + "aType = ?";
+				return "aType";
 		}
 		
 		if (str.equals("SearchBooks")){
-			toReturn = "SELECT title, author FROM Book WHERE ";
+			statement = "{Call GetBooks(?,?)}";
 			if (bookName.isSelected())
-				return toReturn + "title = ?";
+				return "title";
 			else //if author is selected
-				return toReturn + "author = ?";
+				return "author";
 		}
 		if (str.equals("SearchExercises")){
-			toReturn = "SELECT eName, eType FROM Exercise WHERE ";
+			statement = "{Call GetExercise(?,?)}";
 			if (exName.isSelected())
-				return toReturn + "eName = ?";
+				return "eName";
 			else //if eType is selected
-				return toReturn + "eType = ?";
+				return "eType";
 		}
 		if (str.equals("SearchMusic")){
-			toReturn = "SELECT SongTitle, Artist, YearPub, Theme FROM Music WHERE ";
+			statement = "{Call GetMusic(?,?,?)}";
 			if (musTitle.isSelected())
-				return toReturn + "SongTitle = ?";
+				return "SongTitle";
 			else if (musArtist.isSelected())
-				return toReturn + "Artist = ?";
+				return "Artist";
 			else if (musYear.isSelected())
-				return toReturn + "YearPub = ?";
+				return "YearPub";
 			else if (musTheme.isSelected())
-				return toReturn + "Theme = ?";
+				return "Theme";
 		}
 		System.out.println("Something went wrong in buildquery() in InterestsPanel");
 		return null;
@@ -255,12 +257,21 @@ public class InterestsPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			setType();
-			String query = buildQuery(type);
+			String col = buildQuery(type);
 			//System.out.println(query + currInterest);
-			PreparedStatement stmt = null;
+			CallableStatement stmt = null;
 			try{
-				stmt = c.prepareCall(query);
-				stmt.setString(1, this.currInterest);
+				stmt = c.prepareCall(statement);
+				stmt.setString(1,col);
+				stmt.setString(2, this.currInterest);
+				if (type.equalsIgnoreCase("SearchMusic")){
+					if (col.equals("YearPub"))
+						stmt.setInt(3, Integer.parseInt(this.currInterest));
+					else
+						stmt.setInt(3, 0);
+
+				}
+					
 				ResultSet rs = stmt.executeQuery();
 				this.setColIndexes(rs);
 				String result = "";
@@ -273,7 +284,6 @@ public class InterestsPanel extends JPanel {
 						result = "<html>" + result + "<br/> Name: " + rs.getString(colIndex1) + " Type: " + rs.getString(colIndex2);
 				}
 				searchResults.setText(result);
-				System.out.println("Result");
 				
 			}
 			catch(SQLException e){
