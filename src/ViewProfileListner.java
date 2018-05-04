@@ -226,7 +226,9 @@ public class ViewProfileListner implements ActionListener {
 				if (this.selfOrOther){
 					editProdile.addActionListener(new addProfileListner(initalUName.getText(), frame1,dbc));
 				}else{
-					addFriend.addActionListener(new addFriendListener(initalUName,searchedUName,frame1,dbc));
+					System.out.println(initalUName.getText());
+					System.out.println(searchedUName.getText());
+					addFriend.addActionListener(new addFriendListener(initalUName.getText(),searchedUName.getText(),frame1,dbc));
 				}
 
 			}
