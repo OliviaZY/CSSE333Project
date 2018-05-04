@@ -14,13 +14,15 @@ import javax.swing.JTextField;
 public class ViewOtherProfileListner implements ActionListener {
 	private JFrame frame;
 	private Connection dbc;
-	static JTextField tf1;
+	static JTextField searchedUName;
+	static JTextField initialUName;
 	static JLabel uname;
 	static JLabel l3;
 	JButton enterButton; 
-	public ViewOtherProfileListner(JFrame frame1, Connection dbc) {
+	public ViewOtherProfileListner(JTextField initialUName, JFrame frame1, Connection dbc) {
 		this.frame = frame1;
 		this.dbc = dbc;
+		this.initialUName = initialUName;
 	}
 
 	@Override
@@ -35,8 +37,8 @@ public class ViewOtherProfileListner implements ActionListener {
 		uname.setBounds(180, 170, 200, 30);
 		
 		
-		tf1 = new JTextField();
-		tf1.setBounds(450, 170, 200, 30);
+		searchedUName = new JTextField();
+		searchedUName.setBounds(450, 170, 200, 30);
 		
 		
 
@@ -48,8 +50,8 @@ public class ViewOtherProfileListner implements ActionListener {
 		
 		frame.add(enterButton);
 		frame.add(uname);
-		frame.add(tf1);
-		enterButton.addActionListener(new ViewProfileListner(tf1,frame, dbc,false));
+		frame.add(searchedUName);
+		enterButton.addActionListener(new ViewProfileListner(initialUName,searchedUName,frame, dbc,false));
 		frame.add(changingPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
