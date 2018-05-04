@@ -1,121 +1,185 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class addProfileListner implements ActionListener {
 	static JLabel l1;
-	static JLabel l2;
-	static JLabel l3;
-	static JLabel l4;
-	static JLabel l5;
-	static JLabel l6;
-	static JLabel l7;
-	static JLabel l8;
-	
-	static JTextField tf1;
-	static JTextField tf2;
-	JTextField tf3;
-	static JTextField tf4;
-	static JTextField tf5;
-	static JTextField tf6;
-	static JTextField tf7;
+	static JLabel FirstN;
+	static JLabel LastN;
+	static JLabel DBirth;
+	static JLabel State;
+	static JLabel College;
+	static JLabel Profession;
+	static JLabel Field;
+
+	static JTextField FirstNJ;
+	static JTextField LastNJ;
+	static JTextField DBirthJ;
+	static JTextField StateJ;
+	static JTextField CollegeJ;
+	static JTextField ProfessionJ;
+	static JTextField FieldJ;
 	static JTextField tf8;
-	
+
 	static String uname;
-	
+
 	static JButton btn1;
 	static JButton btn2;
 	private Connection dbc;
 	JFrame frame;
+
 	public addProfileListner(String uname, JFrame frame1, Connection dbc) {
 		this.dbc = dbc;
 		this.frame = frame1;
 		this.uname = uname;
 	}
-	public void actionPerformed(ActionEvent arg0) {
-		
-		frame.repaint();
-	    frame.revalidate();
-	    
-	    
-		JFrame frame = new JFrame("Let's set up the profile to meet more people :)");
-		  l1 = new JLabel("Let's set up the profile to meet more people :)");
-		  l1.setForeground(Color.MAGENTA);
-		  l1.setFont(new Font("Serif", Font.BOLD, 25));
-		 
-		  l2 = new JLabel("First Name");
-		  l3 = new JLabel("Last Name");
-		  l4 = new JLabel("Date of Birth");
-		  l5 = new JLabel("State");
-		  l6 = new JLabel("College That You Graduated From");
-		  l7 = new JLabel("Profession");
-		  l8 = new JLabel("Field");
-		  
-		  tf1 = new JTextField(); // first
-		  tf2 = new JTextField();			//last
-		  tf3 = new JTextField("yyyy-mm-dd");	//birth
-		  tf4 = new JTextField();			//state
-		  tf5 = new JTextField();			// college
-		  tf6 = new JTextField();			// profession
-		  tf7 = new JTextField();			//field
-//		  tf8 = new JTextField();
-		  btn1 = new JButton("Save!!!");
-		  btn2 = new JButton("Cancel, I will edit it later.");
-		  
-		 
-		  l1.setBounds(200, 30, 400, 30);
-		  l2.setBounds(80, 70, 200, 30);
-		  l3.setBounds(80, 110, 200, 30);
-		  l4.setBounds(80, 150, 200, 30);
-		  l5.setBounds(80, 190, 200, 30);
-		  l6.setBounds(80, 230, 200, 30);
-		  l7.setBounds(80, 270, 200, 30);
-		  l8.setBounds(80, 310, 200, 30);
-		  
-		  tf1.setBounds(300, 70, 200, 30);
-		  tf2.setBounds(300, 110, 200, 30);
-		  tf3.setBounds(300, 150, 200, 30);
-		  tf4.setBounds(300, 190, 200, 30);
-		  tf5.setBounds(300, 230, 200, 30);
-		  tf6.setBounds(300, 270, 200, 30);
-		  tf7.setBounds(300, 310, 200, 30);
-//		  tf8.setBounds(300, 110, 200, 30);
-		  
-		  btn1.setBounds(150, 360, 100, 30);
-		  btn2.setBounds(300, 360, 300, 30);
-		 
-		  frame.add(l1);
-		  frame.add(l2);
-		  frame.add(l3);
-		  frame.add(l4);
-		  frame.add(l5);
-		  frame.add(l6);
-		  frame.add(l7);
-		  frame.add(l8);
-		  
-		  frame.add(tf1);
-		  frame.add(tf2);		  
-		  frame.add(tf3);
-		  frame.add(tf4);
-		  frame.add(tf5);
-		  frame.add(tf6);
-		  frame.add(tf7);
-		  
-		  frame.add(btn1);
-		  frame.add(btn2);
-		 
-		  frame.setSize(800, 800);
-		  frame.setLayout(null);
-		  frame.setVisible(true);
-		  btn1.addActionListener(new SaveProfileListener(tf1, tf2, tf3, tf4, tf5, tf6, tf7,uname, frame,dbc));
-		  btn2.addActionListener(new SaveProfileListener(tf1, tf2, tf3, tf4, tf5, tf6, tf7,uname, frame,dbc));
-	}
 
+	public void actionPerformed(ActionEvent arg0) {
+
+		frame.repaint();
+		frame.revalidate();
+
+		JFrame frame = new JFrame("Let's set up the profile to meet more people :)");
+		l1 = new JLabel("Let's set up the profile to meet more people :)");
+		l1.setForeground(Color.MAGENTA);
+		l1.setFont(new Font("Serif", Font.BOLD, 25));
+
+		FirstN = new JLabel("First Name");
+		LastN = new JLabel("Last Name");
+		DBirth = new JLabel("Date of Birth");
+		State = new JLabel("State");
+		College = new JLabel("College");
+		Profession = new JLabel("Profession");
+		Field = new JLabel("Field");
+
+		try {
+			CallableStatement cs = this.dbc.prepareCall("call viewProfile(?,?,?,?,?,?,?,?,?)");
+			cs.setString(1, uname);
+			cs.registerOutParameter(2, java.sql.Types.DATE);
+			cs.registerOutParameter(3, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(5, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(6, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(8, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(9, java.sql.Types.INTEGER);
+			System.out.println(cs);
+			cs.execute();
+			int ret = cs.getInt(9);
+			if (ret == 1) {
+				JOptionPane.showMessageDialog((Component) null, "ERROR: user name cannot be empty");
+			} else if (ret == 2) {
+				JOptionPane.showMessageDialog((Component) null, "ERROR: incorrect username.");
+			} else {
+				if(cs.getDate(2)!=null){
+					DBirthJ = new JTextField(cs.getString(3)); // first
+				}else{
+					DBirthJ = new JTextField(); // first
+				}
+				if(cs.getString(3)!= null){
+					StateJ = new JTextField(cs.getString(4)); // first
+				}else{
+					StateJ = new JTextField(); // first
+				}
+				if(cs.getString(4)!= null){
+					ProfessionJ = new JTextField(cs.getString(5)); // first
+				}else{
+					ProfessionJ = new JTextField(); // first
+				}
+				if(cs.getString(5)!= null){
+					CollegeJ = new JTextField(cs.getString(6)); // first
+				}else{
+					CollegeJ = new JTextField(); // first
+				}
+				if(cs.getString(6)!= null){
+					FieldJ = new JTextField(cs.getString(7)); // first
+				}else{
+					FieldJ = new JTextField(); // first
+				}
+				if(cs.getString(7)!= null){
+					FirstNJ = new JTextField(cs.getString(8)); // first
+				}else{
+					FirstNJ = new JTextField(); // first
+				}
+				if(cs.getString(8)!= null){
+					LastNJ = new JTextField(cs.getString(9)); // first
+				}else{
+					LastNJ = new JTextField(); // first
+				}
+				
+
+//				tf2 = new JTextField(); // last
+//				tf3 = new JTextField("yyyy-mm-dd"); // birth
+//				tf4 = new JTextField(); // state
+//				State = new JTextField(); // college
+//				Profession = new JTextField(); // profession
+//				Field = new JTextField(); // field
+//				tf8 = new JTextField();
+				btn1 = new JButton("Save!!!");
+				btn2 = new JButton("Cancel, I will edit it later.");
+
+				l1.setBounds(200, 30, 400, 30);
+				FirstN.setBounds(80, 70, 200, 30);
+				LastN.setBounds(80, 110, 200, 30);
+				DBirth.setBounds(80, 150, 200, 30);
+				State.setBounds(80, 190, 200, 30);
+				College.setBounds(80, 230, 200, 30);
+				Profession.setBounds(80, 270, 200, 30);
+				Field.setBounds(80, 310, 200, 30);
+
+				FirstNJ.setBounds(300, 70, 200, 30);
+				LastNJ.setBounds(300, 110, 200, 30);
+				DBirthJ.setBounds(300, 150, 200, 30);
+				StateJ.setBounds(300, 190, 200, 30);
+				State.setBounds(300, 230, 200, 30);
+				Profession.setBounds(300, 270, 200, 30);
+				Field.setBounds(300, 310, 200, 30);
+				// tf8.setBounds(300, 110, 200, 30);
+
+				btn1.setBounds(150, 360, 100, 30);
+				btn2.setBounds(300, 360, 300, 30);
+
+				frame.add(l1);
+				frame.add(FirstN);
+				frame.add(LastN);
+				frame.add(DBirth);
+				frame.add(State);
+				frame.add(College);
+				frame.add(Profession);
+				frame.add(Field);
+
+				frame.add(FirstNJ);
+				frame.add(LastNJ);
+				frame.add(DBirthJ);
+				frame.add(StateJ);
+				frame.add(StateJ);
+				frame.add(ProfessionJ);
+				frame.add(FieldJ);
+
+				frame.add(btn1);
+				frame.add(btn2);
+
+				frame.setSize(800, 800);
+				frame.setLayout(null);
+				frame.setVisible(true);
+				btn1.addActionListener(new SaveProfileListener(FirstNJ, LastNJ, DBirthJ, StateJ, CollegeJ, ProfessionJ, FieldJ, uname, frame, dbc));
+				btn2.addActionListener(new SaveProfileListener(FirstNJ, LastNJ, DBirthJ, StateJ, CollegeJ, ProfessionJ, FieldJ, uname, frame, dbc));
+			}
+		} catch (SQLException var13) {
+			var13.printStackTrace();
+			JOptionPane.showMessageDialog((Component) null, "add profile Failed");
+		}
+
+	}
 }

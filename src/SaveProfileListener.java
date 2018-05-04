@@ -12,13 +12,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class SaveProfileListener implements ActionListener {
-	static JTextField tf1;
-	static JTextField tf2;
-	JTextField tf3;
-	static JTextField tf4;
-	static JTextField tf5;
-	static JTextField tf6;
-	static JTextField tf7;
+	static JTextField FirstNJ;
+	static JTextField LastNJ;
+	static JTextField DBirthJ;
+	static JTextField StateJ;
+	static JTextField CollegeJ;
+	static JTextField ProfessionJ;
+	static JTextField FieldJ;
 
 	static String uname;
 	java.util.Date date1;
@@ -29,13 +29,13 @@ public class SaveProfileListener implements ActionListener {
 	public SaveProfileListener(JTextField tf1, JTextField tf2, JTextField tf3, JTextField tf4, JTextField tf5,
 			JTextField tf6, JTextField tf7, String uname, JFrame frame, Connection dbc) {
 		this.uname = uname;
-		this.tf1 = tf1;
-		this.tf2 = tf2;
-		this.tf3 = tf3;
-		this.tf4 = tf4;
-		this.tf5 = tf5;
-		this.tf6 = tf6;
-		this.tf7 = tf7;
+		this.FirstNJ = tf1;
+		this.LastNJ = tf2;
+		this.DBirthJ = tf3;
+		this.StateJ = tf4;
+		this.CollegeJ = tf5;
+		this.ProfessionJ = tf6;
+		this.FieldJ = tf7;
 		this.dbc = dbc;
 		this.frame = frame;
 	}
@@ -45,8 +45,9 @@ public class SaveProfileListener implements ActionListener {
 		frame.repaint();
 		frame.revalidate();
 		frame.setVisible(false);
-		String sDate1 = tf3.getText();
-		if (sDate1 != " " || sDate1 != null) {
+		String sDate1 = this.DBirthJ.getText();
+		System.out.println(this.DBirthJ.getText());
+		if (sDate1 != "" || sDate1 != null || sDate1 != "yyyy-mm-dd") {
 			try {
 				date1 = new SimpleDateFormat("yyyy-mm-dd").parse(sDate1);
 			} catch (ParseException exception) {
@@ -60,18 +61,18 @@ public class SaveProfileListener implements ActionListener {
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call SaveProfile(?,?,?,?,?,?,?,?,?)");
 			cs.setString(1, uname);
-			if (sDate1 == null || sDate1.equals("yyyy-mm-dd")){
+			if (sDate1 == "" ||sDate1 == null || sDate1.equals("yyyy-mm-dd")){
 				cs.setDate(2, null);
 			}else{
 				cs.setDate(2, new Date(date1.getTime()));
 			}
 			
-			cs.setString(3, tf4.getText());
-			cs.setString(4, tf6.getText());
-			cs.setString(5, tf5.getText());
-			cs.setString(6, tf7.getText());
-			cs.setString(7, tf1.getText());
-			cs.setString(8, tf2.getText());
+			cs.setString(3, StateJ.getText());
+			cs.setString(4, ProfessionJ.getText());
+			cs.setString(5, CollegeJ.getText());
+			cs.setString(6, FieldJ.getText());
+			cs.setString(7, FirstNJ.getText());
+			cs.setString(8, LastNJ.getText());
 			cs.registerOutParameter(9, java.sql.Types.INTEGER);
 			System.out.println(cs);
 			System.out.println("haha, iam here");

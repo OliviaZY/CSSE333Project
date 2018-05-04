@@ -54,12 +54,7 @@ public class ViewProfileListner implements ActionListener {
 		
 //		frame.repaint();
 //	    frame.revalidate();
-	    
-		JFrame frame1 = new JFrame();
-		frame1.setSize(1000, 1000);
-		//This is the panel that's going to change when you click the link
-		JPanel changingPanel = new MainPagePosts(dbc);
-		
+
 		
 		//Link buttons on the left side of the screen
 		Box links = Box.createVerticalBox();
@@ -72,66 +67,16 @@ public class ViewProfileListner implements ActionListener {
 		JButton closeConnection = new JButton("Close Connection");//THis should probably be changed to something automatic
 //		closeConnection.addActionListener(new ConnectionCloser(dbc));//but it's 3AM so that's beyond my abilites rn
 		
-		  l2 = new JLabel("First Name: ");
-		  l3 = new JLabel("Last Name: ");
-		  l4 = new JLabel("Date of Birth: ");
-		  l5 = new JLabel("State: ");
-		  l6 = new JLabel("College: ");
-		  l7 = new JLabel("Profession: ");
-		  l8 = new JLabel("Field: ");
-		  JButton editProdile = new JButton("edit your profile");
-		  JButton addFriend = new JButton("add this user as your friend!!");
-
-
 		  
-		  
-//		  l9 = new JLabel()
-
-		  l2.setForeground(Color.blue);
-		  l2.setFont(new Font("Serif", Font.BOLD, 20));
-		  l3.setForeground(Color.blue);
-		  l3.setFont(new Font("Serif", Font.BOLD, 20));
-		  l4.setForeground(Color.blue);
-		  l4.setFont(new Font("Serif", Font.BOLD, 20));
-		  l5.setForeground(Color.blue);
-		  l5.setFont(new Font("Serif", Font.BOLD, 20));
-		  l6.setForeground(Color.blue);
-		  l6.setFont(new Font("Serif", Font.BOLD, 20));
-		  l7.setForeground(Color.blue);
-		  l7.setFont(new Font("Serif", Font.BOLD, 20));
-		  l8.setForeground(Color.blue);
-		  l8.setFont(new Font("Serif", Font.BOLD, 20));
-		  editProdile.setForeground(Color.CYAN);
-		  editProdile.setFont(new Font("Serif", Font.BOLD, 20));
-		  addFriend.setForeground(Color.MAGENTA);
-		  addFriend.setFont(new Font("Serif", Font.BOLD, 25));
-
-		  l2.setBounds(80, 70, 200, 30);
-		  l3.setBounds(80, 110, 200, 30);
-		  l4.setBounds(80, 150, 200, 30);
-		  l5.setBounds(80, 190, 200, 30);
-		  l6.setBounds(80, 230, 200, 30);
-		  l7.setBounds(80, 270, 200, 30);
-		  l8.setBounds(80, 310, 200, 30);
-		  editProdile.setBounds(600, 30,300,40);
-		  addFriend.setBounds(150, 380, 300, 40);
-
-		  frame1.add(l2);
-		  frame1.add(l3);
-		  frame1.add(l4);
-		  frame1.add(l5);
-		  frame1.add(l6);
-		  frame1.add(l7);
-		  frame1.add(l8);
-		  if(selfOrOther){
-			  frame1.add(editProdile);
-		  }else{
-			  frame1.add(addFriend);
-		  }
 
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call viewProfile(?,?,?,?,?,?,?,?,?)");
-			cs.setString(1, initalUName.getText());
+			if(selfOrOther){
+				cs.setString(1, initalUName.getText());
+			}else{
+				cs.setString(1, searchedUName.getText());
+			}
+			
 			cs.registerOutParameter(2, java.sql.Types.DATE);
 			cs.registerOutParameter(3, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
@@ -148,9 +93,71 @@ public class ViewProfileListner implements ActionListener {
 			} else if (ret == 2) {
 				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect username.");
 			}  else {
+			    
+				JFrame frame1 = new JFrame();
+				frame1.setSize(1000, 1000);
+				//This is the panel that's going to change when you click the link
+				JPanel changingPanel = new MainPagePosts(dbc);
+				
+				l2 = new JLabel("First Name: ");
+				  l3 = new JLabel("Last Name: ");
+				  l4 = new JLabel("Date of Birth: ");
+				  l5 = new JLabel("State: ");
+				  l6 = new JLabel("College: ");
+				  l7 = new JLabel("Profession: ");
+				  l8 = new JLabel("Field: ");
+				  JButton editProdile = new JButton("edit your profile");
+				  JButton addFriend = new JButton("add this user as your friend!!");
 
 
+				  
+				  
+//				  l9 = new JLabel()
+
+				  l2.setForeground(Color.blue);
+				  l2.setFont(new Font("Serif", Font.BOLD, 20));
+				  l3.setForeground(Color.blue);
+				  l3.setFont(new Font("Serif", Font.BOLD, 20));
+				  l4.setForeground(Color.blue);
+				  l4.setFont(new Font("Serif", Font.BOLD, 20));
+				  l5.setForeground(Color.blue);
+				  l5.setFont(new Font("Serif", Font.BOLD, 20));
+				  l6.setForeground(Color.blue);
+				  l6.setFont(new Font("Serif", Font.BOLD, 20));
+				  l7.setForeground(Color.blue);
+				  l7.setFont(new Font("Serif", Font.BOLD, 20));
+				  l8.setForeground(Color.blue);
+				  l8.setFont(new Font("Serif", Font.BOLD, 20));
+				  editProdile.setForeground(Color.CYAN);
+				  editProdile.setFont(new Font("Serif", Font.BOLD, 20));
+				  addFriend.setForeground(Color.MAGENTA);
+				  addFriend.setFont(new Font("Serif", Font.BOLD, 25));
+
+				  l2.setBounds(80, 70, 200, 30);
+				  l3.setBounds(80, 110, 200, 30);
+				  l4.setBounds(80, 150, 200, 30);
+				  l5.setBounds(80, 190, 200, 30);
+				  l6.setBounds(80, 230, 200, 30);
+				  l7.setBounds(80, 270, 200, 30);
+				  l8.setBounds(80, 310, 200, 30);
+				  editProdile.setBounds(600, 30,300,40);
+				  addFriend.setBounds(150, 380, 300, 40);
+
+				  frame1.add(l2);
+				  frame1.add(l3);
+				  frame1.add(l4);
+				  frame1.add(l5);
+				  frame1.add(l6);
+				  frame1.add(l7);
+				  frame1.add(l8);
+				  if(selfOrOther){
+					  frame1.add(editProdile);
+				  }else{
+					  frame1.add(addFriend);
+				  }
+				  
 				if (cs.getString(3)!=null){
+					System.out.println(cs.getString(3));
 					l10 = new JLabel(cs.getString(3));
 				}else{
 					l10 = new JLabel("       ");
@@ -230,6 +237,10 @@ public class ViewProfileListner implements ActionListener {
 					System.out.println(searchedUName.getText());
 					addFriend.addActionListener(new addFriendListener(initalUName.getText(),searchedUName.getText(),frame1,dbc));
 				}
+				frame1.add(changingPanel, BorderLayout.CENTER);
+//				frame1.add(links, BorderLayout.WEST);
+				frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame1.setVisible(true);
 
 			}
 
@@ -245,10 +256,7 @@ public class ViewProfileListner implements ActionListener {
 //			j.addActionListener(new LinksListener(j.getText(),frame1,dbc));
 //			links.add(j);
 //		}
-		frame1.add(changingPanel, BorderLayout.CENTER);
-//		frame1.add(links, BorderLayout.WEST);
-		frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame1.setVisible(true);
+		
 	}
 
 }
