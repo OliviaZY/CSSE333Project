@@ -112,7 +112,7 @@ public class ProfilePanel extends JPanel {
 		System.out.println("222");
 		if (searchCheck.isSelected()){
 			System.out.println("i am here");
-			enterButton.addActionListener(new ViewProfileListner(searchbox,frame,c,true));
+			//enterButton.addActionListener(new ViewProfileListner(searchbox,frame,c,true));
 		}
 //		rs = getEvents();
 //		JPanel view;

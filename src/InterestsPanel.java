@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 public class InterestsPanel extends JPanel {
 	Connection c = null;
 	JFrame frame;
+	String username;
 	JTextField aniSearch;
 	JTextField musSearch;
 	JTextField bookSearch;
@@ -52,9 +53,10 @@ public class InterestsPanel extends JPanel {
 	JLabel searchResults;
 	
 	
-	public InterestsPanel(Connection c,JFrame f){
+	public InterestsPanel(Connection c,JFrame f,String name){
 		frame = f;
 		this.c = c;
+		username = name;
 		//Searchboxes
 		aniSearch = new JTextField("Enter an animal to search");
 		bookSearch = new JTextField("Enter a book to search");
@@ -291,7 +293,7 @@ public class InterestsPanel extends JPanel {
 					frame.remove(c);
 				}
 			}
-			frame.add(new AddInterests(c), BorderLayout.CENTER);
+			frame.add(new MyInterests(c,username), BorderLayout.CENTER);
 			frame.repaint();
 			frame.revalidate();
 			

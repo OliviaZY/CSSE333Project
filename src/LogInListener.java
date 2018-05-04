@@ -90,7 +90,7 @@ public class LogInListener implements ActionListener {
 //					closeConnection.addActionListener(new ConnectionCloser(dbc));//but it's 3AM so that's beyond my abilites rn
 					links.add(closeConnection);
 					for (JButton j:buttonLinks){
-						j.addActionListener(new LinksListener(j.getText(),frame1,dbc));
+						j.addActionListener(new LinksListener(j.getText(),frame1,dbc,tf1.getText()));
 						links.add(j);
 					}
 					frame1.add(changingPanel, BorderLayout.CENTER);
