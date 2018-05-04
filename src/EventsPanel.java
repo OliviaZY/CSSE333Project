@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-
 /**
  * 
  * Creates the panel displaying events
@@ -38,7 +37,6 @@ public class EventsPanel extends JPanel {
 	// Create Event
 	JButton createEvent;
 	// prev/next page buttons
-	// dghdlfigyo;ey 
 	JButton prev;
 	JButton next;
 	int pageNum;
@@ -48,11 +46,10 @@ public class EventsPanel extends JPanel {
 	ArrayList<JTextField> temp;
 	// Result Set
 	ResultSet rs;
-	
+
 	// ArrayList of event contents
 	ArrayList<JPanel> e;
-	
-	
+
 	/**
 	 * This is a event searching panel
 	 */
@@ -63,6 +60,7 @@ public class EventsPanel extends JPanel {
 		eNameCheck = new JRadioButton("Search by event names");
 		eDateCheck = new JRadioButton("Search by dates");
 		eAddressCheck = new JRadioButton("Search by address");
+
 		createEvent = new JButton("Create an event!");
 
 		prev = new JButton("<- previous");
@@ -75,9 +73,9 @@ public class EventsPanel extends JPanel {
 		eventGroup.add(eAddressCheck);
 
 		enterButton.addActionListener(new ButtonListener(this));
-		createEvent.addActionListener(new ButtonListener());
-		prev.addActionListener(new ButtonListener());
-		next.addActionListener(new ButtonListener());
+		createEvent.addActionListener(new ButtonListener(this));
+		prev.addActionListener(new ButtonListener(this));
+		next.addActionListener(new ButtonListener(this));
 
 		this.add(searchbox, BorderLayout.WEST);
 		this.add(enterButton);
@@ -85,21 +83,19 @@ public class EventsPanel extends JPanel {
 		this.add(eDateCheck);
 		this.add(eAddressCheck);
 		this.add(createEvent);
-		
+
 		// Create event view
 		e = this.eventView();
-		for(int i = 0; i < e.size(); i++){
+		for (int i = 0; i < e.size(); i++) {
 			this.add(e.get(i));
 		}
-		
-		
-		
+
 		this.add(prev, BorderLayout.AFTER_LAST_LINE);
 		this.add(next);
-		
+
 	}
-	
-	private ArrayList<JPanel> eventView(){
+
+	private ArrayList<JPanel> eventView() {
 		rs = getEvents();
 		JPanel view;
 		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
@@ -110,26 +106,28 @@ public class EventsPanel extends JPanel {
 				view = new JPanel();
 				JLabel isolateLine = new JLabel("------------------------------------------------------------");
 				view.add(isolateLine);
-				view.add(new JLabel("Event Name: "+ rs.getString(1)));
-				view.add(new JLabel("Date: "+ rs.getString(2)));
-				view.add(new JLabel("Address: "+ rs.getString(3)));
+				view.add(new JLabel("Event Name: " + rs.getString(1)));
+				view.add(new JLabel("Date: " + rs.getString(2)));
+				view.add(new JLabel("Address: " + rs.getString(3)));
 				view.add(isolateLine);
 				tempP.add(view);
+
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return tempP;
-		
+
 	}
+
 	/**
 	 * retrieve data from mysql database under some conditions
 	 * 
 	 * @return result set of events
 	 */
-	
-	public ResultSet getEvents(){
+
+	public ResultSet getEvents() {
 		ResultSet tempRS = null;
 		String query = buildParameterizedSqlStatementString();
 		PreparedStatement stmt = null;
@@ -147,10 +145,7 @@ public class EventsPanel extends JPanel {
 		}
 		return tempRS;
 	}
-	
-	
-	
-	
+
 	/**
 	 * Pop out a panel where the events are created
 	 * 
@@ -183,10 +178,19 @@ public class EventsPanel extends JPanel {
 		address.setFont(new Font("Serif", Font.BOLD, 20));
 		addressField.setBounds(500, 200, 100, 20);
 
+		// Event Picture : test box --- may change to JFileChooser
+		JLabel picture = new JLabel("Picture: ");
+		JTextField pictureField = new JTextField("Type in picture location");
+		picture.setForeground(Color.BLACK);
+		picture.setFont(new Font("Serif", Font.BOLD, 20));
+		pictureField.setBounds(500, 200, 100, 20);
+
 		// Buttons
+		// JButton addPic = new JButton("I want to add a picture");
+		// addPic.addActionListener(new ButtonListener(this));
 		JButton confirm = new JButton("Confirm");
-		confirm.addActionListener(new ButtonListener());
-		
+		confirm.addActionListener(new ButtonListener(this));
+
 		// add J components into a Panel
 		createEventPanel.add(eName);
 		createEventPanel.add(nameField, BorderLayout.CENTER);
@@ -194,12 +198,15 @@ public class EventsPanel extends JPanel {
 		createEventPanel.add(dateField, BorderLayout.CENTER);
 		createEventPanel.add(address);
 		createEventPanel.add(addressField, BorderLayout.CENTER);
+		createEventPanel.add(picture);
+		createEventPanel.add(pictureField, BorderLayout.CENTER);
 		createEventPanel.add(confirm, BorderLayout.SOUTH);
 
 		ArrayList<JTextField> fields = new ArrayList<>();
 		fields.add(nameField);
 		fields.add(dateField);
 		fields.add(addressField);
+		fields.add(pictureField);
 
 		createEventFrame.add(createEventPanel, BorderLayout.CENTER);
 		createEventFrame.setVisible(true);
@@ -208,40 +215,39 @@ public class EventsPanel extends JPanel {
 
 	/**
 	 * Create an event
-	 *  
-	 * @param EventName: Name of the event
-	 * @param Date: Holding date of the event
-	 * @param Address: Holding address of the event
+	 * 
+	 * @param EventName:
+	 *            Name of the event
+	 * @param Date:
+	 *            Holding date of the event
+	 * @param Address:
+	 *            Holding address of the event
 	 * @return if the event is successfully created
 	 */
 
-	public boolean createEvent(String EventName, String Date, String Address) {
+	public boolean createEvent(String EventName, String Date, String Address, String picture) {
 		CallableStatement cs = null;
 		try {
-			cs = this.c.prepareCall("{call CreateEvent(?,?,?)}");
-			// cs.registerOutParameter(1, java.sql.Types.INTEGER);
+			cs = this.c.prepareCall("{call CreateEvent(?,?,?,?,?)}");
 			cs.setString(1, EventName);
 			cs.setString(2, Date);
 			cs.setString(3, Address);
+			cs.setString(4, picture);
+			cs.registerOutParameter(5, java.sql.Types.INTEGER);
 			cs.execute();
-			// if (cs.getInt(1) == 0) {
-			// System.out.println("yay!");
-			// }
-			// if (cs.getInt(1) == 1) {
-			// JOptionPane.showMessageDialog(null, "ERROR: Event name cannot be
-			// null or empty");
-			// }
-			// if (cs.getInt(1) == 2) {
-			// JOptionPane.showMessageDialog(null, "ERROR: Holding date cannot
-			// be null or empty");
-			// }
-			// if (cs.getInt(1) == 3) {
-			// JOptionPane.showMessageDialog(null, "ERROR: Address cannot be
-			// null or empty");
-			// }
+			if (cs.getInt(5) == 0) {
+				JOptionPane.showMessageDialog(null, "successfully created!");
+			}
+			if (cs.getInt(5) == 1) {
+				JOptionPane.showMessageDialog(null, "ERROR: Event name cannot be null or empty");
+			}
+			if (cs.getInt(5) == 2) {
+				JOptionPane.showMessageDialog(null, "ERROR: Holding date cannot be null or empty");
+			}
+			if (cs.getInt(5) == 3) {
+				JOptionPane.showMessageDialog(null, "ERROR: Address cannot be null or empty");
+			}
 
-			// if the same userName have same eventName at the same date, then
-			// raise error
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -271,45 +277,45 @@ public class EventsPanel extends JPanel {
 
 		return sqlStatement;
 	}
-	
-	
-	
+
 	class ButtonListener implements ActionListener {
-		
-		JPanel p;
-		
-		public ButtonListener(){
-			
+		EventsPanel pan;
+
+		public ButtonListener(EventsPanel p) {
+			pan = p;
 		}
-		
-		public ButtonListener(JPanel p){
-			p = p;
-		}
-		
+
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getActionCommand().equals("Enter")) {
 				currEvent = searchbox.getText();
-				while(p.getComponentCount() != 0){
-					p.remove(p.getComponent(0));
-				}
+				while (!e.isEmpty())
+					pan.remove(e.remove(0));
 				e = eventView();
-				
+				for (int i = 0; i < e.size(); i++) {
+					pan.add(e.get(i));
+				}
+
 			} else if (arg0.getActionCommand().equals("Create an event!")) {
 				temp = addEventPanel();
+				// } else if (arg0.getActionCommand().equals("I want to add a
+				// picture")){
+
 			} else if (arg0.getActionCommand().equals("Confirm")) {
 				ArrayList<String> eventAspects = new ArrayList<>();
 
-				for (int i = 0; i < 3; i++) {
+				for (int i = 0; i < 4; i++) {
 					eventAspects.add(temp.get(i).getText());
 				}
-				createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2));
+				createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), eventAspects.get(3));
 				temp = null;
 
 			} else if (arg0.getActionCommand().equals("<- previous")) {
-				
+
 			} else if (arg0.getActionCommand().equals("next ->")) {
 
 			}
+			pan.repaint();
+			pan.revalidate();
 		}
 
 	}

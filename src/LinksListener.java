@@ -11,11 +11,20 @@ public class LinksListener implements ActionListener {
 	private String type;
 	private JFrame frame;
 	private Connection c;
+	String username;
+	
 
 	public LinksListener(String link, JFrame frame, Connection con) {
 		type = link;
 		this.frame = frame;
 		c = con;
+	}
+
+	public LinksListener(String link, JFrame frame, String username, Connection con) {
+		type = link;
+		this.frame = frame;
+		c = con;
+		this.username = username;
 	}
 
 	@Override
@@ -33,6 +42,8 @@ public class LinksListener implements ActionListener {
 			frame.add(new EventsPanel(c));
 		else if (type.equals("Profile"))
 			frame.add(new ProfilePanel(c), BorderLayout.CENTER);
+		else if (type.equals("create posts"))
+			frame.add(new AddPostPanel(c,this.username),BorderLayout.CENTER);
 
 		frame.repaint();
 		frame.revalidate();

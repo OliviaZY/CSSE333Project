@@ -22,6 +22,9 @@ public class logIn extends JFrame implements ActionListener{
  JTextField tf1;
  JButton btn1;
  JPasswordField p1;
+ 
+ public String username = null;
+ 
  logIn() {
   JFrame frame = new JFrame("Login Form");
   l1 = new JLabel("Login Form");

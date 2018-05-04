@@ -57,6 +57,7 @@ public class LogInListener implements ActionListener {
 		try {
 			stmt = this.dbc.prepareStatement(query);
 			stmt.setString(1, tf1.getText());
+			username = tf1.getText();
 			System.out.println(tf1.getText());
 			System.out.println(stmt);
 			ResultSet rs = stmt.executeQuery();
@@ -75,21 +76,27 @@ public class LogInListener implements ActionListener {
 					JFrame frame1 = new JFrame();
 					frame1.setSize(1000, 1000);
 					//This is the panel that's going to change when you click the link
-					JPanel changingPanel = new MainPagePosts(dbc);
+					JPanel changingPanel = new MainPagePosts(dbc,this.username);
 					
 					//Link buttons on the left side of the screen
 					Box links = Box.createVerticalBox();
-					JButton[] buttonLinks = new JButton[5];
+					JButton[] buttonLinks = new JButton[6];
 					buttonLinks[0] = new JButton("Profile");
 					buttonLinks[1] = new JButton("Friends");//TODO: add code in action listener for this
 					buttonLinks[2] = new JButton("Reminders");//TODO: add code in action listener for this
 					buttonLinks[3] = new JButton("Events");
 					buttonLinks[4] = new JButton("Interests");
+					buttonLinks[5] = new JButton("create posts");
 					JButton closeConnection = new JButton("Close Connection");//THis should probably be changed to something automatic
 //					closeConnection.addActionListener(new ConnectionCloser(dbc));//but it's 3AM so that's beyond my abilites rn
 					links.add(closeConnection);
 					for (JButton j:buttonLinks){
-						j.addActionListener(new LinksListener(j.getText(),frame1,dbc));
+						if(j.getActionCommand().equals("create posts")){
+							j.addActionListener(new LinksListener(j.getText(),frame1,username,dbc));
+						}else{
+							j.addActionListener(new LinksListener(j.getText(),frame1,dbc));
+
+						}
 						links.add(j);
 					}
 					frame1.add(changingPanel, BorderLayout.CENTER);
