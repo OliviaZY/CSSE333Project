@@ -1,0 +1,64 @@
+[user]
+	name = Olivia Zhou
+	email = zhouy40630@gmail.com
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[core]
+	ignorecase = false
+	autocrlf = true
+	safecrlf = false
+	editor = vim
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	rb = rebase
+	pl = pull
+	mg = merge -Xignore-space-change
+	ps = push
+	lg = log --graph --pretty=format:'%C(auto)%h %d %s %C(cyan)<%an>%Creset' --all
+	s = status -s
+	d = diff --ignore-space-change
+	aa = add .
+	rs = reset
+	ft = fetch
+	cl = clean -f
+[rerere]
+	enabled = true
+[merge]
+	tool = meld
+[mergetool "meld"]
+	prompt = false
+    	keepBackup = false
+	keepTemporaries = false
+	path = C:\\Program files (x86)\\Meld\\Meld.exe
+[pull]
+	rebase = true
+[diff]
+	submodule = log
+	tool = meld
+[difftool "meld"]
+	prompt = false
+	path = C:\\Program files (x86)\\Meld\\Meld.exe
+[status]
+	submodulesummary = true
+[fetch]
+	recurseSubmodules = on-demand
+[push]
+	recurseSubmodules = on-demand
+	default = simple
+[help]
+	autocorrect = 10
+[gc]
+	auto = 0
+	reflogExpire = never
+	reflogExpireUnreachable = never
+[color]
+	ui = true
+[color "branch"]
+	remote = yellow
+	current = reverse
+	local = green

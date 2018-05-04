@@ -74,7 +74,7 @@ public class RegisterListener implements ActionListener {
 
 					// Link buttons on the left side of the screen
 					Box links = Box.createVerticalBox();
-					JButton[] buttonLinks = new JButton[5];
+					JButton[] buttonLinks = new JButton[6];
 					buttonLinks[0] = new JButton("Profile");
 					buttonLinks[0].addActionListener(new addProfileListner(tf1.getText(), frame1, dbc));
 					buttonLinks[1] = new JButton("Friends");// TODO: add code in
@@ -86,6 +86,7 @@ public class RegisterListener implements ActionListener {
 																// this
 					buttonLinks[3] = new JButton("Events");
 					buttonLinks[4] = new JButton("Interests");
+					buttonLinks[5] = new JButton("search for a friend");
 					JButton closeConnection = new JButton("Close Connection");// THis
 																				// should
 																				// probably

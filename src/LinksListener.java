@@ -33,8 +33,8 @@ public class LinksListener implements ActionListener {
 			frame.add(new InterestsPanel(c,frame,userName), BorderLayout.CENTER);
 		else if (type.equals("Events"))
 			frame.add(new EventsPanel(c));
-		else if (type.equals("Profile"))
-//			frame.add(new ProfilePanel(c), BorderLayout.CENTER);
+		else if (type.equals("search for a friend"))
+			frame.add(new ProfilePanel(c), BorderLayout.CENTER);
 
 		frame.repaint();
 		frame.revalidate();

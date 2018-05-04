@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ViewProfileListner implements ActionListener {
 	private JFrame frame;
@@ -35,11 +36,17 @@ public class ViewProfileListner implements ActionListener {
 	static JLabel l14;
 	static JLabel l15;
 	
-	private String uname;
-	public ViewProfileListner(String text, JFrame frame1, Connection dbc) {
+	static JTextField initalUName;
+	static JTextField searchedUName;
+	boolean selfOrOther;
+	
+//	private String uname;
+	public ViewProfileListner(JTextField initalUName, JTextField searchedUName, JFrame frame1, Connection dbc, boolean selfOrOther) {
 		this.frame = frame;
 		this.dbc = dbc;
-		this.uname = text;
+		this.initalUName = initalUName;
+		this.selfOrOther = selfOrOther;
+		this.searchedUName = searchedUName;
 	}
 
 	@Override
@@ -73,6 +80,7 @@ public class ViewProfileListner implements ActionListener {
 		  l7 = new JLabel("Profession: ");
 		  l8 = new JLabel("Field: ");
 		  JButton editProdile = new JButton("edit your profile");
+		  JButton addFriend = new JButton("add this user as your friend!!");
 
 
 		  
@@ -95,6 +103,8 @@ public class ViewProfileListner implements ActionListener {
 		  l8.setFont(new Font("Serif", Font.BOLD, 20));
 		  editProdile.setForeground(Color.CYAN);
 		  editProdile.setFont(new Font("Serif", Font.BOLD, 20));
+		  addFriend.setForeground(Color.MAGENTA);
+		  addFriend.setFont(new Font("Serif", Font.BOLD, 25));
 
 		  l2.setBounds(80, 70, 200, 30);
 		  l3.setBounds(80, 110, 200, 30);
@@ -104,6 +114,7 @@ public class ViewProfileListner implements ActionListener {
 		  l7.setBounds(80, 270, 200, 30);
 		  l8.setBounds(80, 310, 200, 30);
 		  editProdile.setBounds(600, 30,300,40);
+		  addFriend.setBounds(150, 380, 300, 40);
 
 		  frame1.add(l2);
 		  frame1.add(l3);
@@ -112,11 +123,15 @@ public class ViewProfileListner implements ActionListener {
 		  frame1.add(l6);
 		  frame1.add(l7);
 		  frame1.add(l8);
-		  frame1.add(editProdile);
+		  if(selfOrOther){
+			  frame1.add(editProdile);
+		  }else{
+			  frame1.add(addFriend);
+		  }
 
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call viewProfile(?,?,?,?,?,?,?,?,?)");
-			cs.setString(1, uname);
+			cs.setString(1, initalUName.getText());
 			cs.registerOutParameter(2, java.sql.Types.DATE);
 			cs.registerOutParameter(3, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
@@ -125,7 +140,7 @@ public class ViewProfileListner implements ActionListener {
 			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(8, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(9, java.sql.Types.INTEGER);
-//			System.out.println(cs);
+			System.out.println(cs);
 			cs.execute();
 			int ret = cs.getInt(9);
 			if (ret == 1) {
@@ -208,8 +223,11 @@ public class ViewProfileListner implements ActionListener {
 				frame1.add(l14);
 				frame1.add(l15);
 //				frame1.add(l16);
-
-				editProdile.addActionListener(new addProfileListner(uname, frame1,dbc));
+				if (this.selfOrOther){
+					editProdile.addActionListener(new addProfileListner(initalUName.getText(), frame1,dbc));
+				}else{
+					addFriend.addActionListener(new addFriendListener(initalUName,searchedUName,frame1,dbc));
+				}
 
 			}
 
