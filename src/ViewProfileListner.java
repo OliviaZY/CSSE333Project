@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ViewProfileListner implements ActionListener {
 	private JFrame frame;
@@ -35,11 +36,15 @@ public class ViewProfileListner implements ActionListener {
 	static JLabel l14;
 	static JLabel l15;
 	
-	private String uname;
-	public ViewProfileListner(String text, JFrame frame1, Connection dbc) {
+	static JTextField tf1;
+	boolean selfOrOther;
+	
+//	private String uname;
+	public ViewProfileListner(JTextField tf1, JFrame frame1, Connection dbc, boolean selfOrOther) {
 		this.frame = frame;
 		this.dbc = dbc;
-		this.uname = text;
+		this.tf1 = tf1;
+		this.selfOrOther = selfOrOther;
 	}
 
 	@Override
@@ -112,11 +117,13 @@ public class ViewProfileListner implements ActionListener {
 		  frame1.add(l6);
 		  frame1.add(l7);
 		  frame1.add(l8);
-		  frame1.add(editProdile);
+		  if(selfOrOther){
+			  frame1.add(editProdile);
+		  }
 
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call viewProfile(?,?,?,?,?,?,?,?,?)");
-			cs.setString(1, uname);
+			cs.setString(1, tf1.getText());
 			cs.registerOutParameter(2, java.sql.Types.DATE);
 			cs.registerOutParameter(3, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
@@ -125,7 +132,7 @@ public class ViewProfileListner implements ActionListener {
 			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(8, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(9, java.sql.Types.INTEGER);
-//			System.out.println(cs);
+			System.out.println(cs);
 			cs.execute();
 			int ret = cs.getInt(9);
 			if (ret == 1) {
@@ -208,8 +215,9 @@ public class ViewProfileListner implements ActionListener {
 				frame1.add(l14);
 				frame1.add(l15);
 //				frame1.add(l16);
-
-				editProdile.addActionListener(new addProfileListner(uname, frame1,dbc));
+				if (selfOrOther){
+					editProdile.addActionListener(new addProfileListner(tf1.getText(), frame1,dbc));
+				}
 
 			}
 

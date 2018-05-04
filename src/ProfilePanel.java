@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -32,9 +30,11 @@ public class ProfilePanel extends JPanel {
 	// search Button group
 	JButton enterButton;
 	JRadioButton eNameCheck;
-	JRadioButton eDateCheck;
-	JRadioButton eAddressCheck;
-	// Create Event
+	JRadioButton eCollegeCheck;
+	JRadioButton eFieldCheck;
+	JRadioButton searchCheck;
+	private JFrame frame;
+	
 	JButton findFriend;
 	// prev/next page buttons
 	JButton prev;
@@ -56,11 +56,13 @@ public class ProfilePanel extends JPanel {
 	*/
 	public ProfilePanel(Connection c) {
 		this.c = c;
-		searchbox = new JTextField("Check a button and enter an event!");
-		enterButton = new JButton("Enter");
+
+		searchCheck = new JRadioButton("view a user's info");
+		searchbox = new JTextField("enter a valid username!");
+		enterButton = new JButton("Search");
 		eNameCheck = new JRadioButton("Search by user names");
-		eDateCheck = new JRadioButton("Search by college");
-		eAddressCheck = new JRadioButton("Search by field");
+		eCollegeCheck = new JRadioButton("Search by college");
+		eFieldCheck = new JRadioButton("Search by field");
 
 		findFriend = new JButton("find a friend!");
 
@@ -69,24 +71,29 @@ public class ProfilePanel extends JPanel {
 
 		// add search events button group
 		ButtonGroup eventGroup = new ButtonGroup();
+		eventGroup.add(searchCheck);
 		eventGroup.add(eNameCheck);
-		eventGroup.add(eDateCheck);
-		eventGroup.add(eAddressCheck);
+		eventGroup.add(eCollegeCheck);
+		eventGroup.add(eFieldCheck);
+		
 
-		enterButton.addActionListener(new ButtonListener(this));
+//		enterButton.addActionListener(new ViewProfileListner(searchbox.getText(),frame,c));
 		findFriend.addActionListener(new ButtonListener(this));
 		prev.addActionListener(new ButtonListener(this));
 		next.addActionListener(new ButtonListener(this));
 
 		this.add(searchbox, BorderLayout.WEST);
+		this.add(searchCheck);
 		this.add(enterButton);
 		this.add(eNameCheck);
-		this.add(eDateCheck);
-		this.add(eAddressCheck);
+		this.add(eCollegeCheck);
+		this.add(eFieldCheck);
 		this.add(findFriend);
 		
-		// Create event view
+		
+//		 Create event view
 		e = this.eventView();
+		System.out.println("111");
 		for(int i = 0; i < e.size(); i++){
 			this.add(e.get(i));
 		}
@@ -95,29 +102,38 @@ public class ProfilePanel extends JPanel {
 		this.add(prev, BorderLayout.AFTER_LAST_LINE);
 		this.add(next);
 		
+//		if (eNameCheck.isSelected()) {
+//			enterButton.addActionListener(new ViewProfileListner(searchbox.getText(),frame,c));
+//		}
+		
 	}
 	
 	private ArrayList<JPanel> eventView(){
-		rs = getEvents();
-		JPanel view;
-		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
-		try {
-			while (rs.next()) {
-				System.out.println(rs.getString(1) + " , " + rs.getString(2) + " , " + rs.getString(3));
-
-				view = new JPanel();
-				JLabel isolateLine = new JLabel("------------------------------------------------------------");
-				view.add(isolateLine);
-				view.add(new JLabel("Event Name: "+ rs.getString(1)));
-				view.add(new JLabel("Date: "+ rs.getString(2)));
-				view.add(new JLabel("Address: "+ rs.getString(3)));
-				view.add(isolateLine);
-				tempP.add(view);
-				
-			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
+		System.out.println("222");
+		if (searchCheck.isSelected()){
+			System.out.println("i am here");
+			enterButton.addActionListener(new ViewProfileListner(searchbox,frame,c,true));
 		}
+//		rs = getEvents();
+//		JPanel view;
+		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
+//		try {
+//			while (rs.next()) {
+//				System.out.println(rs.getString(1) + " , " + rs.getString(2) + " , " + rs.getString(3));
+//
+//				view = new JPanel();
+//				JLabel isolateLine = new JLabel("------------------------------------------------------------");
+//				view.add(isolateLine);
+//				view.add(new JLabel("Event Name: "+ rs.getString(1)));
+//				view.add(new JLabel("Date: "+ rs.getString(2)));
+//				view.add(new JLabel("Address: "+ rs.getString(3)));
+//				view.add(isolateLine);
+//				tempP.add(view);
+//				
+//			}
+//		} catch (SQLException ex) {
+//			ex.printStackTrace();
+//		}
 		
 		return tempP;
 		
@@ -130,20 +146,20 @@ public class ProfilePanel extends JPanel {
 	
 	public ResultSet getEvents(){
 		ResultSet tempRS = null;
-		String query = buildParameterizedSqlStatementString();
-		PreparedStatement stmt = null;
-		try {
-			System.out.println(query + this.currEvent);
-			stmt = c.prepareCall(query);
-			if (currEvent != null)
-				stmt.setString(1, "%" + currEvent + "%");
-			tempRS = stmt.executeQuery();
-
-		} catch (SQLException e) {
-			System.out.println(e);
-			JOptionPane.showMessageDialog(null, "Check a searching type.");
-			System.out.println("problem");
-		}
+//		String query = buildParameterizedSqlStatementString();
+//		PreparedStatement stmt = null;
+//		try {
+//			System.out.println(query + this.currEvent);
+//			stmt = c.prepareCall(query);
+//			if (currEvent != null)
+//				stmt.setString(1, "%" + currEvent + "%");
+//			tempRS = stmt.executeQuery();
+//
+//		} catch (SQLException e) {
+//			System.out.println(e);
+//			JOptionPane.showMessageDialog(null, "Check a searching type.");
+//			System.out.println("problem");
+//		}
 		return tempRS;
 	}
 	
@@ -254,22 +270,22 @@ public class ProfilePanel extends JPanel {
 	* 
 	* @return sqlStatement: Final query
 	*/
-	private String buildParameterizedSqlStatementString() {
-		String sqlStatement = "SELECT EventName, Date, Address \nFROM Events\n";
-
-		if (eNameCheck.isSelected()) {
-			sqlStatement = sqlStatement + " WHERE EventName Like ? \n";
-		}
-		if (eDateCheck.isSelected()) {
-			sqlStatement = sqlStatement + " WHERE date = ? \n";
-		}
-		if (eAddressCheck.isSelected()) {
-			sqlStatement = sqlStatement + " WHERE address LIKE ? \n";
-		}
-		sqlStatement = sqlStatement + "ORDER BY ID DESC LIMIT 5;\n";
-
-		return sqlStatement;
-	}
+//	private String buildParameterizedSqlStatementString() {
+//		String sqlStatement = "SELECT EventName, Date, Address \nFROM Events\n";
+//
+//		if (eNameCheck.isSelected()) {
+//			sqlStatement = sqlStatement + " WHERE EventName Like ? \n";
+//		}
+//		if (eCollegeCheck.isSelected()) {
+//			sqlStatement = sqlStatement + " WHERE date = ? \n";
+//		}
+//		if (eFieldCheck.isSelected()) {
+//			sqlStatement = sqlStatement + " WHERE address LIKE ? \n";
+//		}
+//		sqlStatement = sqlStatement + "ORDER BY ID DESC LIMIT 5;\n";
+//
+//		return sqlStatement;
+//	}
 	
 	
 	
