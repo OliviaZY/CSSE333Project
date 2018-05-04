@@ -80,15 +80,12 @@ public class LogInListener implements ActionListener {
 					JButton[] buttonLinks = new JButton[6];
 					buttonLinks[0] = new JButton("Profile");
 					buttonLinks[0].addActionListener(new ViewProfileListner(tf1,tf1,frame1,dbc,true));
-					buttonLinks[1] = new JButton("Friends");//TODO: add code in action listener for this
-					buttonLinks[2] = new JButton("Reminders");//TODO: add code in action listener for this
+					buttonLinks[1] = new JButton("Friends");
+					buttonLinks[2] = new JButton("Reminders");
 					buttonLinks[3] = new JButton("Events");
 					buttonLinks[4] = new JButton("Interests");
 					buttonLinks[5] = new JButton("view a user's info");
 					buttonLinks[5].addActionListener(new ViewOtherProfileListner(tf1,frame1,dbc));
-					JButton closeConnection = new JButton("Close Connection");//THis should probably be changed to something automatic
-//					closeConnection.addActionListener(new ConnectionCloser(dbc));//but it's 3AM so that's beyond my abilites rn
-					links.add(closeConnection);
 					for (JButton j:buttonLinks){
 						j.addActionListener(new LinksListener(j.getText(),frame1,dbc,tf1.getText()));
 						links.add(j);

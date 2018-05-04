@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -47,6 +49,14 @@ public class MainClass {
 		  frame.add(p1);
 		  frame.add(btn1);
 		  frame.add(btn2);
+		  
+		  frame.addWindowListener(new WindowAdapter()
+		  {
+		      public void windowClosing(WindowEvent e)
+		      {
+		          dbc.closeConnection();
+		      }
+		  });
 		 
 		  frame.setSize(800, 800);
 		  frame.setLayout(null);
