@@ -54,6 +54,8 @@ public class addFriendListener implements ActionListener {
 				JOptionPane.showMessageDialog((Component)null, "ERROR: you are already friend with this searched user.");
 			}else if(ret == 6){
 				JOptionPane.showMessageDialog((Component)null, "ERROR: you have already sent a friend request with this searched user.");
+			}else if(ret == 7){
+				JOptionPane.showMessageDialog((Component)null, "ERROR: you cannot send a friend request to yourself!.");
 			}else{
 				JOptionPane.showMessageDialog((Component)null, "SUCCESSFUL, your request has been send to the searched user.");
 				}
