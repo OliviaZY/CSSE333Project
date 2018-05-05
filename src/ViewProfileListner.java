@@ -28,13 +28,13 @@ public class ViewProfileListner implements ActionListener {
 	static JLabel l7;
 	static JLabel l8;
 	
-	static JLabel l9;
-	static JLabel l10;
-	static JLabel l11;
-	static JLabel l12;
-	static JLabel l13;
-	static JLabel l14;
-	static JLabel l15;
+	static JLabel firstN;
+	static JLabel lastN;
+	static JLabel DBirth;
+	static JLabel state;
+	static JLabel college;
+	static JLabel professor;
+	static JLabel field;
 	
 	static JTextField initalUName;
 	static JTextField searchedUName;
@@ -77,9 +77,9 @@ public class ViewProfileListner implements ActionListener {
 				cs.setString(1, searchedUName.getText());
 			}
 			
-			cs.registerOutParameter(2, java.sql.Types.DATE);
+			cs.registerOutParameter(4, java.sql.Types.DATE);
 			cs.registerOutParameter(3, java.sql.Types.VARCHAR);
-			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(2, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(5, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(6, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
@@ -112,7 +112,7 @@ public class ViewProfileListner implements ActionListener {
 
 				  
 				  
-//				  l9 = new JLabel()
+//				  firstN = new JLabel()
 
 				  l2.setForeground(Color.blue);
 				  l2.setFont(new Font("Serif", Font.BOLD, 20));
@@ -158,77 +158,78 @@ public class ViewProfileListner implements ActionListener {
 				  
 				if (cs.getString(3)!=null){
 					System.out.println(cs.getString(3));
-					l10 = new JLabel(cs.getString(3));
+					lastN = new JLabel(cs.getString(3));
 				}else{
-					l10 = new JLabel("       ");
+					lastN = new JLabel("       ");
 				}
 
-				if (cs.getString(4)!=null) {
-					l11 = new JLabel(cs.getString(4));
+				if (cs.getDate(4)!=null) {
+					DBirth = new JLabel(cs.getDate(4).toString());
 				}else{
-					l11 = new JLabel("       ");
+					DBirth = new JLabel("       ");
 				}
-
+					
+				if (cs.getString(2)!=null) {
+					firstN = new JLabel(cs.getString(2));
+				}else{
+					firstN = new JLabel("       ");
+				}
 				if (cs.getString(5)!=null) {
-					l12 = new JLabel(cs.getString(5));
+					state = new JLabel(cs.getString(5));
 				}else{
-					l12 = new JLabel("       ");
+					state = new JLabel("       ");
 				}
 				if (cs.getString(6)!=null) {
-					l13 = new JLabel(cs.getString(6));
+					college = new JLabel(cs.getString(6));
 				}else{
-					l13 = new JLabel("       ");
+					college = new JLabel("       ");
 				}
 				if (cs.getString(7)!=null) {
-					l14 = new JLabel(cs.getString(7));
+					professor = new JLabel(cs.getString(7));
 				}else{
-					l14 = new JLabel("       ");
+					professor = new JLabel("       ");
 				}
 				if (cs.getString(8)!=null) {
-					l15 = new JLabel(cs.getString(8));
+					field = new JLabel(cs.getString(8));
 				}else{
-					l15 = new JLabel("       ");
+					field = new JLabel("       ");
 				}
 
-				if (cs.getDate(2)!=null) {
-					l9 = new JLabel(cs.getDate(2).toString());
-				}else{
-					l9 = new JLabel("       ");
-				}
+				
 
 
-				l12.setForeground(Color.BLACK);
-			    l12.setFont(new Font("Arial", Font.BOLD, 16));
-			    l13.setForeground(Color.BLACK);
-			    l13.setFont(new Font("Arial", Font.BOLD, 16));
-			    l14.setForeground(Color.BLACK);
-			    l14.setFont(new Font("Arial", Font.BOLD, 16));
-			    l15.setForeground(Color.BLACK);
-			    l15.setFont(new Font("Arial", Font.BOLD, 16));
-			    l9.setForeground(Color.BLACK);
-			    l9.setFont(new Font("Arial", Font.BOLD, 16));
-			    l10.setForeground(Color.BLACK);
-			    l10.setFont(new Font("Arial", Font.BOLD, 16));
-			    l11.setForeground(Color.BLACK);
-			    l11.setFont(new Font("Arial", Font.BOLD, 16));
+				state.setForeground(Color.BLACK);
+			    state.setFont(new Font("Arial", Font.BOLD, 16));
+			    college.setForeground(Color.BLACK);
+			    college.setFont(new Font("Arial", Font.BOLD, 16));
+			    professor.setForeground(Color.BLACK);
+			    professor.setFont(new Font("Arial", Font.BOLD, 16));
+			    field.setForeground(Color.BLACK);
+			    field.setFont(new Font("Arial", Font.BOLD, 16));
+			    firstN.setForeground(Color.BLACK);
+			    firstN.setFont(new Font("Arial", Font.BOLD, 16));
+			    lastN.setForeground(Color.BLACK);
+			    lastN.setFont(new Font("Arial", Font.BOLD, 16));
+			    DBirth.setForeground(Color.BLACK);
+			    DBirth.setFont(new Font("Arial", Font.BOLD, 16));
 			    
 
 
-				l9.setBounds(300, 70, 200, 30);
-				l10.setBounds(300, 110, 200, 30);
-				l11.setBounds(300, 150, 200, 30);
-				l12.setBounds(300, 190, 200, 30);
-				l13.setBounds(300, 230, 200, 30);
-				l14.setBounds(300, 270, 200, 30);
-				l15.setBounds(300, 310, 200, 30);
+				firstN.setBounds(300, 70, 200, 30);
+				lastN.setBounds(300, 110, 200, 30);
+				DBirth.setBounds(300, 150, 200, 30);
+				state.setBounds(300, 190, 200, 30);
+				college.setBounds(300, 230, 200, 30);
+				professor.setBounds(300, 270, 200, 30);
+				field.setBounds(300, 310, 200, 30);
 
-				frame1.add(l9);
-				frame1.add(l10);
-				frame1.add(l11);
-				frame1.add(l12);
-				frame1.add(l13);
-				frame1.add(l14);
-				frame1.add(l15);
+				frame1.add(firstN);
+				frame1.add(lastN);
+				frame1.add(DBirth);
+				frame1.add(state);
+				frame1.add(college);
+				frame1.add(professor);
+				frame1.add(field);
 //				frame1.add(l16);
 				if (this.selfOrOther){
 					editProdile.addActionListener(new addProfileListner(initalUName.getText(), frame1,dbc));

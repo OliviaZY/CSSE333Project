@@ -47,6 +47,7 @@ public class SaveProfileListener implements ActionListener {
 		frame.setVisible(false);
 		String sDate1 = this.DBirthJ.getText();
 		System.out.println(this.DBirthJ.getText());
+		System.out.println("this is a test for sDate1");
 		if (sDate1 != "" || sDate1 != null || sDate1 != "yyyy-mm-dd") {
 			try {
 				date1 = new SimpleDateFormat("yyyy-mm-dd").parse(sDate1);
@@ -55,7 +56,7 @@ public class SaveProfileListener implements ActionListener {
 				exception.printStackTrace();
 			}
 		}else{
-			date1 = null;
+			this.date1 = null;
 		}
 		// java.util.Date date = SimpleDateFormat.parse(pattern);
 		try {

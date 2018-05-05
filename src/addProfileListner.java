@@ -66,9 +66,9 @@ public class addProfileListner implements ActionListener {
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call viewProfile(?,?,?,?,?,?,?,?,?)");
 			cs.setString(1, uname);
-			cs.registerOutParameter(2, java.sql.Types.DATE);
+			cs.registerOutParameter(4, java.sql.Types.DATE);
 			cs.registerOutParameter(3, java.sql.Types.VARCHAR);
-			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(2, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(5, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(6, java.sql.Types.VARCHAR);
 			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
@@ -82,28 +82,28 @@ public class addProfileListner implements ActionListener {
 			} else if (ret == 2) {
 				JOptionPane.showMessageDialog((Component) null, "ERROR: incorrect username.");
 			} else {
-				if(cs.getDate(2)!=null){
-					DBirthJ = new JTextField(cs.getString(3)); // first
+				if(cs.getDate(4)!=null){
+					DBirthJ = new JTextField(cs.getDate(4).toString()); // first
 				}else{
 					DBirthJ = new JTextField(); // first
 				}
-				if(cs.getString(3)!= null){
-					StateJ = new JTextField(cs.getString(4)); // first
+				if(cs.getString(5)!= null){
+					StateJ = new JTextField(cs.getString(5)); // first
 				}else{
 					StateJ = new JTextField(); // first
 				}
-				if(cs.getString(4)!= null){
-					ProfessionJ = new JTextField(cs.getString(5)); // first
+				if(cs.getString(7)!= null){
+					ProfessionJ = new JTextField(cs.getString(7)); // first
 				}else{
 					ProfessionJ = new JTextField(); // first
 				}
-				if(cs.getString(5)!= null){
+				if(cs.getString(6)!= null){
 					CollegeJ = new JTextField(cs.getString(6)); // first
 				}else{
 					CollegeJ = new JTextField(); // first
 				}
-				if(cs.getString(6)!= null){
-					FieldJ = new JTextField(cs.getString(7)); // first
+				if(cs.getString(8)!= null){
+					FieldJ = new JTextField(cs.getString(8)); // first
 				}else{
 					FieldJ = new JTextField(); // first
 				}
@@ -112,10 +112,15 @@ public class addProfileListner implements ActionListener {
 				}else{
 					FirstNJ = new JTextField(); // first
 				}
-				if(cs.getString(8)!= null){
-					LastNJ = new JTextField(cs.getString(9)); // first
+				if(cs.getString(3)!= null){
+					LastNJ = new JTextField(cs.getString(3)); // first
 				}else{
 					LastNJ = new JTextField(); // first
+				}
+				if(cs.getString(2)!= null){
+					FirstNJ = new JTextField(cs.getString(2)); // first
+				}else{
+					FirstNJ = new JTextField(); // first
 				}
 				
 
@@ -142,9 +147,9 @@ public class addProfileListner implements ActionListener {
 				LastNJ.setBounds(300, 110, 200, 30);
 				DBirthJ.setBounds(300, 150, 200, 30);
 				StateJ.setBounds(300, 190, 200, 30);
-				State.setBounds(300, 230, 200, 30);
-				Profession.setBounds(300, 270, 200, 30);
-				Field.setBounds(300, 310, 200, 30);
+				CollegeJ.setBounds(300, 230, 200, 30);
+				ProfessionJ.setBounds(300, 270, 200, 30);
+				FieldJ.setBounds(300, 310, 200, 30);
 				// tf8.setBounds(300, 110, 200, 30);
 
 				btn1.setBounds(150, 360, 100, 30);
@@ -163,7 +168,7 @@ public class addProfileListner implements ActionListener {
 				frame.add(LastNJ);
 				frame.add(DBirthJ);
 				frame.add(StateJ);
-				frame.add(StateJ);
+				frame.add(CollegeJ);
 				frame.add(ProfessionJ);
 				frame.add(FieldJ);
 
