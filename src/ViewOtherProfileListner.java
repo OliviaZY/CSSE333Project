@@ -30,7 +30,7 @@ public class ViewOtherProfileListner implements ActionListener {
 		frame = new JFrame();
 		frame.setSize(1000, 1000);
 		//This is the panel that's going to change when you click the link
-		JPanel changingPanel = new MainPagePosts(dbc);
+		JPanel changingPanel = new MainPagePosts(dbc,initialUName.getText());
 		uname = new JLabel("user name: ");
 		uname.setForeground(Color.blue);
 		uname.setFont(new Font("Serif", Font.BOLD, 20));

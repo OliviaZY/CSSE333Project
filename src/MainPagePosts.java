@@ -1,3 +1,4 @@
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,26 +13,29 @@ public class MainPagePosts extends JPanel {
 	Connection c = null;
 	ResultSet rs = null;
 	ArrayList<JPanel> tempP;
-	
-	public MainPagePosts(Connection c){
+	public String username = null;
+	public MainPagePosts(Connection c, String username){
 		this.c = c;
 		tempP = postsView();
 		for(int i = 0; i < tempP.size(); i++){
 			this.add(tempP.get(i));
 		}
+		this.username = username;
 	}
 	
 	private String buildParameterizedSqlStatementString(String username) {
-		String sqlStatement = "SELECT po.Poster, po.Date, po.Text "
-				+ "\nFROM Posts po, person p \n where p.UserName = po.Poster ";
-		
-		if(username != null){
-			sqlStatement = sqlStatement + "and username = ?";
+		CallableStatement cs = null;
+		try {
+			cs = this.c.prepareCall("{call ViewPosts(?,?)}");
+			cs.setString(1, username);
+			cs.registerOutParameter(2,java.sql.Types.INTEGER);
+			cs.execute();
+//			return cs.getString(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
-		sqlStatement = sqlStatement + "ORDER BY po.Date DESC LIMIT 10;\n";
-
-		return sqlStatement;
+		return "select p.firstN, p.lastN, po.date, po.text from person p left join Posts po on po.Poster = p.UserName" +  
+		" ORDER BY po.Date DESC LIMIT 10;";
 	}
 	
 	private ArrayList<JPanel> postsView(){
@@ -39,13 +43,14 @@ public class MainPagePosts extends JPanel {
 		JPanel view;
 		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
 		try {
-			while (rs.next()) {
+			while (rs.next() && rs.getString(3) != null) {
 				view = new JPanel();
 				JLabel isolateLine = new JLabel("------------------------------------------------------------");
 				view.add(isolateLine);
 				view.add(new JLabel(rs.getString(1) ));
 				view.add(new JLabel("        "+ rs.getString(2) + "\n"));
 				view.add(new JLabel(rs.getString(3) + "\n"));
+				view.add(new JLabel(rs.getString(4) + "\n"));
 				view.add(isolateLine);
 				tempP.add(view);
 			}
@@ -60,7 +65,7 @@ public class MainPagePosts extends JPanel {
 	public ResultSet getPosts(){
 		ResultSet tempRS = null;
 		// haven't decided if set username as a field
-		String query = buildParameterizedSqlStatementString(null);
+		String query = buildParameterizedSqlStatementString(username);
 		System.out.println(query);
 		PreparedStatement stmt = null;
 		try {
@@ -68,7 +73,6 @@ public class MainPagePosts extends JPanel {
 			tempRS = stmt.executeQuery();
 		} catch (SQLException e) {
 			System.out.println(e);
-			JOptionPane.showMessageDialog(null, "Check a searching type.");
 			System.out.println("problem");
 		}
 		return tempRS;

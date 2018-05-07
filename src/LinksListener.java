@@ -35,6 +35,8 @@ public class LinksListener implements ActionListener {
 			frame.add(new EventsPanel(c));
 		else if (type.equals("search for a friend"))
 			frame.add(new ProfilePanel(c), BorderLayout.CENTER);
+		else if (type.equals("add Posts"))
+			frame.add(new AddPostPanel(c,userName));
 
 		frame.repaint();
 		frame.revalidate();

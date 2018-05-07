@@ -70,11 +70,11 @@ public class RegisterListener implements ActionListener {
 					frame1.setSize(1000, 1000);
 					// This is the panel that's going to change when you click
 					// the link
-					JPanel changingPanel = new MainPagePosts(dbc);
+					JPanel changingPanel = new MainPagePosts(dbc,tf1.getText());
 
 					// Link buttons on the left side of the screen
 					Box links = Box.createVerticalBox();
-					JButton[] buttonLinks = new JButton[6];
+					JButton[] buttonLinks = new JButton[7];
 					buttonLinks[0] = new JButton("Profile");
 					buttonLinks[0].addActionListener(new addProfileListner(tf1.getText(), frame1, dbc));
 					buttonLinks[1] = new JButton("Friends");// TODO: add code in
@@ -87,6 +87,7 @@ public class RegisterListener implements ActionListener {
 					buttonLinks[3] = new JButton("Events");
 					buttonLinks[4] = new JButton("Interests");
 					buttonLinks[5] = new JButton("search for a friend");
+					buttonLinks[6] = new JButton("add Posts");
 					JButton closeConnection = new JButton("Close Connection");// THis
 																				// should
 																				// probably
