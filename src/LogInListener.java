@@ -74,10 +74,24 @@ public class LogInListener implements ActionListener {
 					frame1.setSize(1000, 1000);
 					//This is the panel that's going to change when you click the link
 					JPanel changingPanel = new MainPagePosts(dbc,tf1.getText());
-
-					//Link buttons on the left side of the screen
 					Box links = Box.createVerticalBox();
-					JButton[] buttonLinks = new JButton[7];
+					JButton[] buttonLinks = new JButton[8];
+					
+					cs = this.dbc.prepareCall("call isThereFriendRequest(?,?)");
+					cs.setString(1, tf1.getText());
+					cs.registerOutParameter(2, java.sql.Types.BOOLEAN);
+					cs.execute();
+					boolean result = cs.getBoolean(2);
+					System.out.println(result);
+					if (result){
+						buttonLinks[7] = new JButton("you have a friend request!");
+					}else{
+						buttonLinks = new JButton[7];
+					}
+					System.out.println("this is a test for notification for friend request");
+					//Link buttons on the left side of the screen
+//					Box links = Box.createVerticalBox();
+//					JButton[] buttonLinks = new JButton[7];
 					buttonLinks[0] = new JButton("Profile");
 					buttonLinks[0].addActionListener(new ViewProfileListner(tf1,tf1,frame1,dbc,true));
 					buttonLinks[1] = new JButton("Friends");
