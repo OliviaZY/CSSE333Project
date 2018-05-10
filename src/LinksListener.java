@@ -37,6 +37,8 @@ public class LinksListener implements ActionListener {
 			frame.add(new ProfilePanel(c), BorderLayout.CENTER);
 		else if (type.equals("add Posts"))
 			frame.add(new AddPostPanel(c,userName));
+		else if (type.equals("Posts"))
+			frame.add(new MainPagePosts(c,userName),BorderLayout.CENTER);
 
 		frame.repaint();
 		frame.revalidate();

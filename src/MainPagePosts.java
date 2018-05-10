@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MainPagePosts extends JPanel {
@@ -14,6 +13,8 @@ public class MainPagePosts extends JPanel {
 	ResultSet rs = null;
 	ArrayList<JPanel> tempP;
 	public String username = null;
+	
+	
 	public MainPagePosts(Connection c, String username){
 		this.c = c;
 		tempP = postsView();
@@ -41,7 +42,7 @@ public class MainPagePosts extends JPanel {
 	private ArrayList<JPanel> postsView(){
 		rs = getPosts();
 		JPanel view;
-		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
+		tempP = new ArrayList<JPanel>();
 		try {
 			while (rs.next() && rs.getString(3) != null) {
 				view = new JPanel();
