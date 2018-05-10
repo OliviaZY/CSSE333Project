@@ -151,10 +151,7 @@ public class InterestsPanel extends JPanel {
 		
 		this.add(searchResults,BorderLayout.PAGE_END);
 		
-		JPanel j = new JPanel();
-		JLabel k = new JLabel("this is a test");
-		j.add(k);
-		this.add(j);
+		
 		
 	}
 	/**
