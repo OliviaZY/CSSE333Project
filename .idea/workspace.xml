@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e5791fd-d3d5-48d5-80db-1dfb2e5841cf" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/ProfilePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ProfilePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LogInListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LogInListener.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,19 +17,30 @@
       <file leaf-file-name="RegisterListener.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/RegisterListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="89" column="36" lean-forward="true" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
+            <state relative-caret-position="273">
+              <caret line="90" column="36" lean-forward="true" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LinksListener.class" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LinksListener.class" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bin/LinksListener.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="38" column="37" lean-forward="true" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+            <state relative-caret-position="546">
+              <caret line="40" column="37" lean-forward="true" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
               <folding>
                 <element signature="e#0#1272#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="viewFriendRequest.class" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bin/viewFriendRequest.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#718#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -38,8 +49,8 @@
       <file leaf-file-name="addProfileListner.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/addProfileListner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2247">
-              <caret line="116" column="43" selection-start-line="116" selection-start-column="43" selection-end-line="116" selection-end-column="43" />
+            <state relative-caret-position="2520">
+              <caret line="121" column="22" selection-start-line="121" selection-start-column="22" selection-end-line="121" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -48,7 +59,7 @@
         <entry file="file://$PROJECT_DIR$/src/SaveProfileListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="819">
-              <caret line="80" column="16" selection-start-line="80" selection-start-column="16" selection-end-line="80" selection-end-column="33" />
+              <caret line="82" column="16" selection-start-line="82" selection-start-column="16" selection-end-line="82" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -56,8 +67,8 @@
       <file leaf-file-name="LogInListener.class" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bin/LogInListener.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="92" column="46" lean-forward="true" selection-start-line="92" selection-start-column="46" selection-end-line="92" selection-end-column="65" />
+            <state relative-caret-position="693">
+              <caret line="105" column="46" lean-forward="true" selection-start-line="105" selection-start-column="46" selection-end-line="105" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -65,8 +76,8 @@
       <file leaf-file-name="ViewProfileListner.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ViewProfileListner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="212" lean-forward="true" selection-start-line="212" selection-end-line="212" />
+            <state relative-caret-position="1113">
+              <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
             </state>
           </provider>
         </entry>
@@ -75,7 +86,7 @@
         <entry file="file://$PROJECT_DIR$/bin/MainClass.class">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="987">
-              <caret line="57" column="42" selection-start-line="57" selection-start-column="42" selection-end-line="57" selection-end-column="42" />
+              <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -85,15 +96,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="218">
               <caret line="62" column="32" lean-forward="true" selection-start-line="62" selection-start-column="32" selection-end-line="62" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RegisterListener.class" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bin/RegisterListener.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="672">
-              <caret line="57" selection-start-line="57" selection-end-line="57" />
             </state>
           </provider>
         </entry>
@@ -258,7 +260,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16270000" />
+    <option name="totallyTimeSpent" value="16863000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -338,13 +340,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/RegisterListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1197">
-          <caret line="78" column="64" selection-start-line="78" selection-start-column="64" selection-end-line="78" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/addProfileListner.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2436">
@@ -513,8 +508,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/LinksListener.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="38" column="37" lean-forward="true" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+        <state relative-caret-position="546">
+          <caret line="40" column="37" lean-forward="true" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
           <folding>
             <element signature="e#0#1272#0" expanded="true" />
           </folding>
@@ -654,43 +649,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/addProfileListner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2247">
-          <caret line="116" column="43" selection-start-line="116" selection-start-column="43" selection-end-line="116" selection-end-column="43" />
+        <state relative-caret-position="2520">
+          <caret line="121" column="22" selection-start-line="121" selection-start-column="22" selection-end-line="121" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RegisterListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="89" column="36" lean-forward="true" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
+        <state relative-caret-position="273">
+          <caret line="90" column="36" lean-forward="true" selection-start-line="90" selection-start-column="36" selection-end-line="90" selection-end-column="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/MainClass.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="987">
-          <caret line="57" column="42" selection-start-line="57" selection-start-column="42" selection-end-line="57" selection-end-column="42" />
+          <caret line="64" column="42" selection-start-line="64" selection-start-column="42" selection-end-line="64" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/bin/LogInListener.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="92" column="46" lean-forward="true" selection-start-line="92" selection-start-column="46" selection-end-line="92" selection-end-column="65" />
+        <state relative-caret-position="693">
+          <caret line="105" column="46" lean-forward="true" selection-start-line="105" selection-start-column="46" selection-end-line="105" selection-end-column="46" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SaveProfileListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="819">
-          <caret line="80" column="16" selection-start-line="80" selection-start-column="16" selection-end-line="80" selection-end-column="33" />
+          <caret line="82" column="16" selection-start-line="82" selection-start-column="16" selection-end-line="82" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ViewProfileListner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="212" lean-forward="true" selection-start-line="212" selection-end-line="212" />
+        <state relative-caret-position="1113">
+          <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/viewFriendRequest.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#718#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
