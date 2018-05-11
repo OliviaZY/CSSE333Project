@@ -53,6 +53,7 @@ public class viewFriendRequest implements ActionListener {
 				buttonLinksAcc[i].setBounds(600, 400+30*i, 100, 30);
 				frame1.add(buttonLinksAcc[i]);
 				
+				
 				buttonLinksDec[i]=new JButton("decline");
 				buttonLinksDec[i].setForeground(Color.blue);
 				buttonLinksDec[i].setFont(new Font("Serif", Font.BOLD, 20));
@@ -68,13 +69,16 @@ public class viewFriendRequest implements ActionListener {
 			// the result set");
 			// System.out.println(i);
 			while (rs.next()) {
-				i++;
+				
 				System.out.println(i);
 				JLabel l1 = new JLabel(rs.getString(1));
+				buttonLinksDec[i].addActionListener(new declineFriendRequestListner(username.getText(),l1.getText(), frame1,dbc));
+				buttonLinksAcc[i].addActionListener(new acceptFriendRequestListner(username.getText(),l1.getText(), frame1,dbc));
+
 				JButton accept = new JButton("accept as a friend!");
 				// rs.next();
 				System.out.println("this is a test for select the first row in the result set");
-				l1.setBounds(300*i, 300, 200, 30);
+				l1.setBounds(100, 300*i, 200, 30);
 //				accept.setPreferredSize(new Dimension(100,50));
 				l1.setForeground(Color.blue);
 				l1.setFont(new Font("Serif", Font.BOLD, 40));
@@ -83,6 +87,7 @@ public class viewFriendRequest implements ActionListener {
 //				l1.setBounds(80, 70, 200, 30);
 //				frame1.add(accept);
 				frame1.add(l1);
+				i++;
 				
 				
 			}
