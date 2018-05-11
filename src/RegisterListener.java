@@ -70,7 +70,7 @@ public class RegisterListener implements ActionListener {
 					frame1.setSize(1000, 1000);
 					// This is the panel that's going to change when you click
 					// the link
-					JPanel changingPanel = new MainPagePosts(dbc,tf1.getText());
+					JPanel changingPanel = new MainPagePosts(dbc,tf1.getText(),frame);
 
 					// Link buttons on the left side of the screen
 					Box links = Box.createVerticalBox();

@@ -73,7 +73,7 @@ public class LogInListener implements ActionListener {
 					JFrame frame1 = new JFrame();
 					frame1.setSize(1000, 1000);
 					//This is the panel that's going to change when you click the link
-					JPanel changingPanel = new MainPagePosts(dbc,tf1.getText());
+					JPanel changingPanel = new MainPagePosts(dbc,tf1.getText(),frame);
 					Box links = Box.createVerticalBox();
 					JButton[] buttonLinks = new JButton[8];
 					
