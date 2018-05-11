@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -13,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class ViewProfileListner implements ActionListener {
@@ -98,7 +96,7 @@ public class ViewProfileListner implements ActionListener {
 				JFrame frame1 = new JFrame();
 				frame1.setSize(1000, 1000);
 				//This is the panel that's going to change when you click the link
-				JPanel changingPanel = new MainPagePosts(dbc,initalUName.getText());
+				//JPanel changingPanel = new MainPagePosts(dbc,initalUName.getText(),frame);
 				
 				l2 = new JLabel("First Name: ");
 				  l3 = new JLabel("Last Name: ");
@@ -239,7 +237,7 @@ public class ViewProfileListner implements ActionListener {
 					System.out.println(searchedUName.getText());
 					addFriend.addActionListener(new addFriendListener(initalUName.getText(),searchedUName.getText(),frame1,dbc));
 				}
-				frame1.add(changingPanel, BorderLayout.CENTER);
+				//frame1.add(changingPanel, BorderLayout.CENTER);
 //				frame1.add(links, BorderLayout.WEST);
 				frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame1.setVisible(true);
