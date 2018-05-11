@@ -151,6 +151,8 @@ public class InterestsPanel extends JPanel {
 		
 		this.add(searchResults,BorderLayout.PAGE_END);
 		
+		
+		
 	}
 	/**
 	 * 
