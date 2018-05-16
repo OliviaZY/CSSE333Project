@@ -34,12 +34,12 @@ public class ViewProfileListner implements ActionListener {
 	static JLabel professor;
 	static JLabel field;
 	
-	static JTextField initalUName;
+	static String initalUName;
 	static JTextField searchedUName;
 	boolean selfOrOther;
 	
 //	private String uname;
-	public ViewProfileListner(JTextField initalUName, JTextField searchedUName, JFrame frame1, Connection dbc, boolean selfOrOther) {
+	public ViewProfileListner(String initalUName, JTextField searchedUName, JFrame frame1, Connection dbc, boolean selfOrOther) {
 		this.frame = frame;
 		this.dbc = dbc;
 		this.initalUName = initalUName;
@@ -71,7 +71,7 @@ public class ViewProfileListner implements ActionListener {
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call viewProfile(?,?,?,?,?,?,?,?,?)");
 			if(selfOrOther){
-				cs.setString(1, initalUName.getText());
+				cs.setString(1, initalUName);
 			}else{
 				cs.setString(1, searchedUName.getText());
 			}
@@ -231,11 +231,11 @@ public class ViewProfileListner implements ActionListener {
 				frame1.add(field);
 //				frame1.add(l16);
 				if (this.selfOrOther){
-					editProdile.addActionListener(new addProfileListner(initalUName.getText(), frame1,dbc));
+					editProdile.addActionListener(new addProfileListner(initalUName, frame1,dbc));
 				}else{
-					System.out.println(initalUName.getText());
+					System.out.println(initalUName);
 					System.out.println(searchedUName.getText());
-					addFriend.addActionListener(new addFriendListener(initalUName.getText(),searchedUName.getText(),frame1,dbc));
+					addFriend.addActionListener(new addFriendListener(initalUName,searchedUName.getText(),frame1,dbc));
 				}
 				//frame1.add(changingPanel, BorderLayout.CENTER);
 //				frame1.add(links, BorderLayout.WEST);
