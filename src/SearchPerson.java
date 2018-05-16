@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -15,12 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class MyInterests extends JPanel {
+public class SearchPerson extends JPanel {
 	Connection con;
 	String username;
 	
 	JButton enterButton;
-	JButton deleteButton;
 	
 	JLabel displayResults;
 	
@@ -32,7 +30,7 @@ public class MyInterests extends JPanel {
 	JTextField enterMusTheme;
 	
 	
-	public MyInterests(Connection c,String uName){
+	public SearchPerson(Connection c,String uName){
 		con = c;
 		username = uName;
 		//BoxLayout rButtonBox = new BoxLayout(this,BoxLayout.X_AXIS);
@@ -44,9 +42,7 @@ public class MyInterests extends JPanel {
 		
 		
 		enterButton = new JButton("Enter");
-		deleteButton = new JButton("Delete");
-		displayResults = new JLabel("");
-		updateLabel();
+		displayResults = new JLabel("No interest searched yet");
 
 		
 		
@@ -66,126 +62,31 @@ public class MyInterests extends JPanel {
 		}
 		
 		enterButton.addActionListener(new EnterDataListener());
-		deleteButton.addActionListener(new DeleteActionListener());
 		
 		this.add(enterName,BorderLayout.CENTER);
 		this.add(enterType);
 		this.add(enterMusTheme);
 		this.add(enterMusYear);
 		this.add(enterButton);
-		this.add(deleteButton);
 		this.add(displayResults);
 
 		
 
 
 	}
-	private void updateLabel(){
-		String result = "";
-		try {
-			CallableStatement stm = con.prepareCall("{Call ListPersonInterests(?)}");
-			stm.setString(1,username);
-			System.out.println(username);
-			ResultSet results = stm.executeQuery();
-
-			while(results.next()){	
-				result = "<html>" + result + "<br/> Name: " + results.getString(results.findColumn("Name"));
-			}
-			
-			
-		} catch (SQLException exception) {
-			JOptionPane.showMessageDialog(this,"There was a problem in getting your interests",
-			         "Error",JOptionPane.ERROR_MESSAGE);
-			System.out.println("ERROR ERROR ERROR in update label");
-		}
-
-		if (!result.equals("")){
-			displayResults.setText(result);
-		}
-		
-	}
+	
 	//Returns the panel so that it can be used by the inner classes
-	public MyInterests getThis(){
+	public SearchPerson getThis(){
 		return this;
 	}
-	private void checkInputLength(){
-		if (enterName.getText().length() > 20){
-			enterName.setText(enterName.getText().substring(0,19));
-		}
-		if (enterType.getText().length() > 20){
-			enterType.setText(enterType.getText().substring(0,19));
-		}
-
-	}
 	
-	class DeleteActionListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			int result;
-			try{
-				checkInputLength();
-			if (selectButtons[0].isSelected()){//book is selected
-				
-				CallableStatement stm = con.prepareCall("{call DeletePersonalBook(?,?,?,?)}");
-				stm.setString(1, enterName.getText());
-				stm.setString(2, enterType.getText());
-				stm.setString(3, username);
-				stm.registerOutParameter(4, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(4);
-			}
-			else if (selectButtons[1].isSelected()){//Animal is selected
-				CallableStatement stm = con.prepareCall("{call DeletePersonalAnimal(?,?,?,?)}");
-				stm.setString(1, enterName.getText());
-				stm.setString(2, enterType.getText());
-				stm.setString(3, username);
-				stm.registerOutParameter(4, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(4);
-			}
-			else if (selectButtons[2].isSelected()){//Music is selected
-//				if (Integer.getInteger(enterMusYear.getText()) < 1600 || Integer.getInteger(enterMusYear.getText() ) > 2018){
-//				JOptionPane.showMessageDialog(getThis(),"Invalid Year Input",
-//				         "Error",JOptionPane.ERROR_MESSAGE);
-//			}
-			if (enterMusTheme.getText().length() > 20){
-				enterMusTheme.setText(enterMusTheme.getText().substring(0,19));
-			}
-				CallableStatement stm = con.prepareCall("{call DeletePersonalMusic(?,?,?,?,?,?)}");
-				stm.setString(1, enterName.getText());
-				stm.setString(2, enterType.getText());
-				stm.setString(3, enterMusYear.getText());
-				stm.setString(4, enterMusTheme.getText());
-				stm.setString(5, username);
-				stm.registerOutParameter(6, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(6);
-			}
-			else if (selectButtons[3].isSelected()){//Exercise is selected
-				CallableStatement stm = con.prepareCall("{call DeletePersonalExercise(?,?,?,?)}");
-				stm.setString(1, enterName.getText());
-				stm.setString(2, enterType.getText());
-				stm.setString(3, username);
-				stm.registerOutParameter(4, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(4);
-			}
-			updateLabel();
-			}
-			catch (SQLException e){
-				JOptionPane.showMessageDialog(getThis(),"There was a problem in deleting your interests",
-				         "Error",JOptionPane.ERROR_MESSAGE); 
-			}			
-		}
-		
-	}
+	
 	class EnterDataListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			int result;
 			try{
-				checkInputLength();
+				
 			if (selectButtons[0].isSelected()){//book is selected
 				if (enterName.getText().length() > 20){
 					enterName.setText(enterName.getText().substring(0,19));
@@ -211,14 +112,6 @@ public class MyInterests extends JPanel {
 				result = stm.getInt(4);
 			}
 			else if (selectButtons[2].isSelected()){//Music is selected
-				
-//				if (Integer.getInteger(enterMusYear.getText()) < 1600 || Integer.getInteger(enterMusYear.getText() ) > 2018){
-//				JOptionPane.showMessageDialog(getThis(),"Invalid Year Input",
-//				         "Error",JOptionPane.ERROR_MESSAGE);
-//			}
-			if (enterMusTheme.getText().length() > 20){
-				enterMusTheme.setText(enterMusTheme.getText().substring(0,19));
-			}
 				CallableStatement stm = con.prepareCall("{call InsertPersonalMusic(?,?,?,?,?,?)}");
 				stm.setString(1, enterName.getText());
 				stm.setString(2, enterType.getText());
@@ -238,7 +131,6 @@ public class MyInterests extends JPanel {
 				stm.executeQuery();
 				result = stm.getInt(4);
 			}
-			updateLabel();
 			}
 			catch (SQLException e){
 				JOptionPane.showMessageDialog(getThis(),"There was a problem in inserting your interests",
