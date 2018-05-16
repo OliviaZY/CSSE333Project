@@ -3,8 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -26,8 +26,7 @@ public class SearchPerson extends JPanel {
 	
 	JTextField enterName;
 	JTextField enterType;
-	JTextField enterMusYear;
-	JTextField enterMusTheme;
+;
 	
 	
 	public SearchPerson(Connection c,String uName){
@@ -37,8 +36,7 @@ public class SearchPerson extends JPanel {
 		//BoxLayout textAndEnterBox = new BoxLayout(this,BoxLayout.X_AXIS);
 		enterName = new JTextField("Enter the song title");
 		enterType = new JTextField("Enter the song artist");
-		enterMusYear = new JTextField("Enter the year published");
-		enterMusTheme = new JTextField("Enter the song theme");
+		
 		
 		
 		enterButton = new JButton("Enter");
@@ -65,14 +63,28 @@ public class SearchPerson extends JPanel {
 		
 		this.add(enterName,BorderLayout.CENTER);
 		this.add(enterType);
-		this.add(enterMusTheme);
-		this.add(enterMusYear);
+
 		this.add(enterButton);
 		this.add(displayResults);
 
 		
 
 
+	}
+	/**
+	 * 
+	 *Checks to see if text has been entered in a box
+	 *
+	 * @param input
+	 * @return true if text has been entered, false otherwise
+	 */
+	private boolean checkEnteredText(String input){
+		if (!input.equals("") && input.length() < 9)
+			return true;
+		if (input.equals("") || input.substring(0,10).equals("Enter the ")){
+			return false;
+		}
+		return true;
 	}
 	
 	//Returns the panel so that it can be used by the inner classes
@@ -87,50 +99,41 @@ public class SearchPerson extends JPanel {
 			int result;
 			try{
 				
-			if (selectButtons[0].isSelected()){//book is selected
+			
 				if (enterName.getText().length() > 20){
 					enterName.setText(enterName.getText().substring(0,19));
 				}
 				if (enterType.getText().length() > 20){
 					enterType.setText(enterType.getText().substring(0,19));
 				}
-				CallableStatement stm = con.prepareCall("{call InsertPersonalBook(?,?,?,?)}");
+				CallableStatement stm = con.prepareCall("{call SearchPeople(?,?,?,?)}");
 				stm.setString(1, enterName.getText());
 				stm.setString(2, enterType.getText());
-				stm.setString(3, username);
-				stm.registerOutParameter(4, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(4);
-			}
-			else if (selectButtons[1].isSelected()){//Animal is selected
-				CallableStatement stm = con.prepareCall("{call InsertPersonalAnimal(?,?,?,?)}");
-				stm.setString(1, enterName.getText());
-				stm.setString(2, enterType.getText());
-				stm.setString(3, username);
-				stm.registerOutParameter(4, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(4);
-			}
-			else if (selectButtons[2].isSelected()){//Music is selected
-				CallableStatement stm = con.prepareCall("{call InsertPersonalMusic(?,?,?,?,?,?)}");
-				stm.setString(1, enterName.getText());
-				stm.setString(2, enterType.getText());
-				stm.setString(3, enterMusYear.getText());
-				stm.setString(4, enterMusTheme.getText());
-				stm.setString(5, username);
-				stm.registerOutParameter(6, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(6);
-			}
-			else if (selectButtons[3].isSelected()){//Exercise is selected
-				CallableStatement stm = con.prepareCall("{call InsertPersonalExercise(?,?,?,?)}");
-				stm.setString(1, enterName.getText());
-				stm.setString(2, enterType.getText());
-				stm.setString(3, username);
-				stm.registerOutParameter(4, Types.INTEGER);
-				stm.executeQuery();
-				result = stm.getInt(4);
-			}
+				if (!checkEnteredText(enterName.getText())){
+					enterName.setText("Enter the name");
+					stm.setInt(3, 1);
+				}
+				else if (!checkEnteredText(enterType.getText())){
+					enterType.setText("Enter the type");
+					stm.setInt(3, 0);
+				}
+				else 
+					stm.setInt(3, 2);
+				if (selectButtons[0].isSelected())//book is selected
+					stm.setInt(4, 1);
+				else if (selectButtons[1].isSelected())//animal is selected
+					stm.setInt(4, 0);
+				else if (selectButtons[2].isSelected()) //music is selected
+					stm.setInt(4, 3);
+				else //exercise is selected
+					stm.setInt(4, 2);
+				String nameList = "";
+				ResultSet results = stm.executeQuery();
+				while(results.next()){	
+					nameList = "<html>" + nameList + "<br/>" + results.getString(1) + " " + results.getString(2);
+				}
+				displayResults.setText(nameList);
+			
 			}
 			catch (SQLException e){
 				JOptionPane.showMessageDialog(getThis(),"There was a problem in inserting your interests",
@@ -153,28 +156,22 @@ public class SearchPerson extends JPanel {
 				enterType.setText("Enter the author name");
 				enterName.setVisible(true);
 				enterType.setVisible(true);
-				enterMusYear.setVisible(false);
-				enterMusTheme.setVisible(false);
+	
 			}
 			else if (type.equals("Exercise")){
 				enterName.setText("Enter the exercise name");
 				enterType.setText("Enter the exercise type");
-				enterMusYear.setVisible(false);
-				enterMusTheme.setVisible(false);
+			
 			}
 			else if (type.equals("Animal")){
 				enterName.setText("Enter the animal name");
 				enterType.setText("Enter the animal type");
-				enterMusYear.setVisible(false);
-				enterMusTheme.setVisible(false);
+			
 			}
 			else if (type.equals("Music")){
 				enterName.setText("Enter the song name");
 				enterType.setText("Enter the song artist");
-				enterMusYear.setVisible(true);
-				enterMusTheme.setVisible(true);
-				enterMusYear.setText("Enter the year the song was published");
-				enterMusTheme.setText("Enter the song's theme");
+	
 			}
 			
 		}
