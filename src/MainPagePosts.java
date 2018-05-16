@@ -81,6 +81,7 @@ public class MainPagePosts extends JPanel {
 		return tempP;
 		
 	}
+	
 	public int getInitNumLikes(int postID){
 		try {
 			CallableStatement stm = c.prepareCall("{call DisplayPostLikes(?,?)}");
