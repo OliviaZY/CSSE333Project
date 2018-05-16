@@ -54,6 +54,7 @@ public class InterestsPanel extends JPanel {
 	
 	
 	JLabel searchResults;
+	JButton searchPeople;
 	
 	
 	public InterestsPanel(Connection c,JFrame f,String name){
@@ -75,6 +76,9 @@ public class InterestsPanel extends JPanel {
 		
 		//Enter New Interest Button
 		newEnterButton = new JButton("Enter a New Interest?");
+		
+		//Search for people by interest button
+		searchPeople = new JButton("Search for friends by interest?");
 
 		//RadioButtons that determine what you're searching
 		aniName = new JRadioButton("Search Animals by Name");
@@ -123,6 +127,10 @@ public class InterestsPanel extends JPanel {
 		
 		//Adding action listener to the enter new button
 		newEnterButton.addActionListener(new NewEnterListener());
+		
+		//Adding action listener to the searchPerson button
+		searchPeople.addActionListener(new SearchPersonListener());
+		
 
 		//adding everything to the panel
 		this.add(aniSearch);
@@ -148,6 +156,8 @@ public class InterestsPanel extends JPanel {
 		this.add(musTheme);
 		
 		this.add(newEnterButton);
+		
+		this.add(searchPeople);
 		
 		this.add(searchResults,BorderLayout.PAGE_END);
 		
@@ -306,6 +316,23 @@ public class InterestsPanel extends JPanel {
 				}
 			}
 			frame.add(new MyInterests(c,username), BorderLayout.CENTER);
+			frame.repaint();
+			frame.revalidate();
+			
+		}
+		
+	}
+		class SearchPersonListener implements ActionListener{
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// Removes the panel that was there before
+			for (Component c : frame.getContentPane().getComponents()) {
+				if (c instanceof JPanel) {
+					frame.remove(c);
+				}
+			}
+			frame.add(new SearchPerson(c,username), BorderLayout.CENTER);
 			frame.repaint();
 			frame.revalidate();
 			
