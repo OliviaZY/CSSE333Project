@@ -73,7 +73,7 @@ public class viewFriendRequest implements ActionListener {
 				System.out.println(i);
 				JLabel l1 = new JLabel(rs.getString(1));
 				buttonLinksDec[i].addActionListener(new declineFriendRequestListner(username.getText(),l1.getText(), frame1,dbc));
-				buttonLinksAcc[i].addActionListener(new acceptFriendRequestListner(username.getText(),l1.getText(), frame1,dbc));
+				buttonLinksAcc[i].addActionListener(new selectFriendTypeListner(username.getText(),l1.getText(), frame1,dbc));
 
 				JButton accept = new JButton("accept as a friend!");
 				// rs.next();
