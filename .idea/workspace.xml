@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2e5791fd-d3d5-48d5-80db-1dfb2e5841cf" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/LogInListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/LogInListener.java" afterDir="false" />
-    </list>
+    <list default="true" id="2e5791fd-d3d5-48d5-80db-1dfb2e5841cf" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -75,7 +73,7 @@
         <entry file="file://$PROJECT_DIR$/src/ViewProfileListner.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1113">
-              <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+              <caret line="244" lean-forward="true" selection-start-line="244" selection-end-line="244" />
             </state>
           </provider>
         </entry>
@@ -136,9 +134,9 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="217" />
-    <option name="y" value="-23" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="26" />
+    <option name="y" value="-17" />
     <option name="width" value="1750" />
     <option name="height" value="969" />
   </component>
@@ -156,11 +154,6 @@
             <path>
               <item name="MeetMe" type="b2602c69:ProjectViewProjectNode" />
               <item name="MeetMe" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MeetMe" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MeetMe" type="462c0819:PsiDirectoryNode" />
-              <item name="bin" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -258,10 +251,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17498000" />
+    <option name="totallyTimeSpent" value="18294000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -676,7 +669,7 @@
     <entry file="file://$PROJECT_DIR$/src/ViewProfileListner.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1113">
-          <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+          <caret line="244" lean-forward="true" selection-start-line="244" selection-end-line="244" />
         </state>
       </provider>
     </entry>

@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +30,16 @@ public class ViewOtherProfileListner implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		frame = new JFrame();
 		frame.setSize(1000, 1000);
+//		frame.removeAll();
+		
+		for(Component c : frame.getContentPane().getComponents()){
+            if(c instanceof JPanel){
+                frame.remove(c);
+            }
+		}
+		frame.revalidate();
+		frame.repaint();
+//		
 		//This is the panel that's going to change when you click the link
 		JPanel changingPanel = new MainPagePosts(dbc,initialUName.getText(),frame);
 		uname = new JLabel("user name: ");
