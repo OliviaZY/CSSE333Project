@@ -3,6 +3,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -46,7 +47,8 @@ public class selectFriendTypeListner implements ActionListener {
 		frame1.setSize(1000, 1000);
 		
 		Box verticalBox = Box.createVerticalBox();
-		
+
+		ButtonGroup typeGroup = new ButtonGroup();
 		parent = new JRadioButton("parent");
 		CollegeMate = new JRadioButton("CollegeMate");
 		workMate = new JRadioButton("workMate");
@@ -69,8 +71,20 @@ public class selectFriendTypeListner implements ActionListener {
 		verticalBox.add(boss);
 		verticalBox.add(mentor);
 		
+		typeGroup.add(parent);
+		typeGroup.add(CollegeMate);
+		typeGroup.add(workMate);
+		typeGroup.add(sameLocation);
+		typeGroup.add(sameIns);
+		typeGroup.add(boyfrined);
+		typeGroup.add(girlfriend);
+		typeGroup.add(boss);
+		typeGroup.add(mentor);
+
+//		bookName.setSelected(true);
 		enter.setBounds(300,350,100,30);
 		
+//		frame1.add(typeGroup);
 		frame1.add(enter);
 		frame1.add(verticalBox);
 		

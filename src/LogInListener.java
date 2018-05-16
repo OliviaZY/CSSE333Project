@@ -75,7 +75,7 @@ public class LogInListener implements ActionListener {
 					//This is the panel that's going to change when you click the link
 					JPanel changingPanel = new MainPagePosts(dbc,tf1.getText(),frame);
 					Box links = Box.createVerticalBox();
-					JButton[] buttonLinks = new JButton[8];
+					JButton[] buttonLinks = new JButton[9];
 					
 					cs = this.dbc.prepareCall("call isThereFriendRequest(?,?)");
 					cs.setString(1, tf1.getText());
@@ -84,9 +84,9 @@ public class LogInListener implements ActionListener {
 					boolean result = cs.getBoolean(2);
 					System.out.println(result);
 					if (result){
-						buttonLinks[7] = new JButton("you have a friend request!");
+						buttonLinks[8] = new JButton("you have a friend request!");
 					}else{
-						buttonLinks = new JButton[7];
+						buttonLinks = new JButton[8];
 					}
 					System.out.println("this is a test for notification for friend request");
 					//Link buttons on the left side of the screen
@@ -102,8 +102,10 @@ public class LogInListener implements ActionListener {
 					buttonLinks[5] = new JButton("view a user's info");
 //					buttonLinks[5].addActionListener(new ViewOtherProfileListner(tf1.getText(),dbc));
 					buttonLinks[6] = new JButton("add Posts");
+					buttonLinks[7] = new JButton("Recommendation");
+					buttonLinks[7].addActionListener(new RecommendationListner(tf1,frame1,dbc));
 					if (result){
-						buttonLinks[7].addActionListener(new viewFriendRequest(tf1, frame1, dbc));
+						buttonLinks[8].addActionListener(new viewFriendRequest(tf1, frame1, dbc));
 					}
 					for (JButton j:buttonLinks){
 						j.addActionListener(new LinksListener(j.getText(),frame1,dbc,tf1.getText()));
