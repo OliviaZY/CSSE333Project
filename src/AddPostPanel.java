@@ -16,7 +16,6 @@ public class AddPostPanel extends JPanel{
 	Connection c = null;
 	JButton commit;
 	JTextField posts;
-	JTextField pics;
 	ArrayList<JTextField> ar = new ArrayList<JTextField>();
 	String username;
 	public AddPostPanel(Connection c, String username) {
@@ -27,14 +26,11 @@ public class AddPostPanel extends JPanel{
 		createPostFrame.setSize(500, 500);
 		posts = new JTextField("Enter your posts here~ limit 200 characters!");
 		posts.setBounds(1000, 50, 400, 300);
-		pics = new JTextField("EX: C:/<Location>/<picture name>");
-		pics.setBounds(1500, 50, 100,50);
+
 		commit = new JButton("commit!");
 		commit.addActionListener(new CommitListener(username));
 		createPostPanel.add(posts);
-		createPostPanel.add(pics);
 		ar.add(posts);
-		ar.add(pics);
 		createPostPanel.add(commit);
 		createPostFrame.add(createPostPanel);
 		createPostFrame.setVisible(true);
@@ -43,14 +39,13 @@ public class AddPostPanel extends JPanel{
 	class CommitListener implements ActionListener{
 		String username;
 		public CommitListener(String username) {
-			// TODO Auto-generated constructor stub
 			this.username = username;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getActionCommand().equals("commit!")){
-				createPosts(ar.get(0).getText(), username, ar.get(1).getText());
+				createPosts(ar.get(0).getText(), username, ar.get(1).getText()); 
 			}
 			
 		}

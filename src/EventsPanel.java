@@ -25,22 +25,29 @@ import javax.swing.JTextField;
  * Creates the panel displaying events
  *
  * @author garretje. Created Apr 26, 2018.
+ * Edited by Yuhong
  */
 public class EventsPanel extends JPanel {
 	Connection c = null;
+	String username = null;
 	JTextField searchbox;
 	// search Button group
 	JButton enterButton;
 	JRadioButton eNameCheck;
 	JRadioButton eDateCheck;
 	JRadioButton eAddressCheck;
+	// interest related button group
+	JRadioButton aniCheck;
+	JRadioButton bookCheck;
+	JRadioButton exerCheck;
+	JRadioButton musicCheck;
 	// Create Event
 	JButton createEvent;
 	// prev/next page buttons
 	JButton prev;
 	JButton next;
 	int pageNum;
-
+	
 	String currEvent;
 
 	ArrayList<JTextField> temp;
@@ -53,14 +60,20 @@ public class EventsPanel extends JPanel {
 	/**
 	 * This is a event searching panel
 	 */
-	public EventsPanel(Connection c) {
+	public EventsPanel(Connection c, String username) {
 		this.c = c;
+		this.username = username;
 		searchbox = new JTextField("Check a button and enter an event!");
 		enterButton = new JButton("Enter");
 		eNameCheck = new JRadioButton("Search by event names");
 		eDateCheck = new JRadioButton("Search by dates");
 		eAddressCheck = new JRadioButton("Search by address");
-
+		
+		aniCheck = new JRadioButton("The interest is relate to Animals");
+		bookCheck = new JRadioButton("The interest is relate to Books");
+		exerCheck = new JRadioButton("The interest is relate to Exersices");
+		musicCheck = new JRadioButton("The interest is relate to Musics");
+		
 		createEvent = new JButton("Create an event!");
 
 		prev = new JButton("<- previous");
@@ -71,7 +84,13 @@ public class EventsPanel extends JPanel {
 		eventGroup.add(eNameCheck);
 		eventGroup.add(eDateCheck);
 		eventGroup.add(eAddressCheck);
-
+		
+		ButtonGroup interestGroup = new ButtonGroup();
+		interestGroup.add(aniCheck);
+		interestGroup.add(bookCheck);
+		interestGroup.add(exerCheck);
+		interestGroup.add(musicCheck);
+		
 		enterButton.addActionListener(new ButtonListener(this));
 		createEvent.addActionListener(new ButtonListener(this));
 		prev.addActionListener(new ButtonListener(this));
@@ -178,13 +197,14 @@ public class EventsPanel extends JPanel {
 		address.setFont(new Font("Serif", Font.BOLD, 20));
 		addressField.setBounds(500, 200, 100, 20);
 
-		// Event Picture : test box --- may change to JFileChooser
-		JLabel picture = new JLabel("Picture: ");
-		JTextField pictureField = new JTextField("Type in picture location");
-		picture.setForeground(Color.BLACK);
-		picture.setFont(new Font("Serif", Font.BOLD, 20));
-		pictureField.setBounds(500, 200, 100, 20);
-
+		// Event creates interest *: text box
+		JLabel interest = new JLabel("Interest: ");
+		JTextField interestField = new JTextField("Name of Interest");
+		interest.setForeground(Color.BLACK);
+		interest.setFont(new Font("Serif", Font.BOLD, 20));
+		interestField.setBounds(500, 250, 100, 20);
+		
+		
 		// Buttons
 		// JButton addPic = new JButton("I want to add a picture");
 		// addPic.addActionListener(new ButtonListener(this));
@@ -198,15 +218,15 @@ public class EventsPanel extends JPanel {
 		createEventPanel.add(dateField, BorderLayout.CENTER);
 		createEventPanel.add(address);
 		createEventPanel.add(addressField, BorderLayout.CENTER);
-		createEventPanel.add(picture);
-		createEventPanel.add(pictureField, BorderLayout.CENTER);
+		createEventPanel.add(interest);
+		createEventPanel.add(interestField);
 		createEventPanel.add(confirm, BorderLayout.SOUTH);
 
 		ArrayList<JTextField> fields = new ArrayList<>();
 		fields.add(nameField);
 		fields.add(dateField);
 		fields.add(addressField);
-		fields.add(pictureField);
+		fields.add(interestField);
 
 		createEventFrame.add(createEventPanel, BorderLayout.CENTER);
 		createEventFrame.setVisible(true);
@@ -225,28 +245,42 @@ public class EventsPanel extends JPanel {
 	 * @return if the event is successfully created
 	 */
 
-	public boolean createEvent(String EventName, String Date, String Address, String picture) {
+	public boolean createEvent(String EventName, String Date, String Address, String interest) {
 		CallableStatement cs = null;
 		try {
 			cs = this.c.prepareCall("{call CreateEvent(?,?,?,?,?)}");
 			cs.setString(1, EventName);
 			cs.setString(2, Date);
 			cs.setString(3, Address);
-			cs.setString(4, picture);
+			cs.setString(4, interest);
+			cs.setString(5, interest);
 			cs.registerOutParameter(5, java.sql.Types.INTEGER);
 			cs.execute();
-			if (cs.getInt(5) == 0) {
+			if (cs.getInt(6) == 0) {
 				JOptionPane.showMessageDialog(null, "successfully created!");
 			}
-			if (cs.getInt(5) == 1) {
+			if (cs.getInt(6) == 1) {
 				JOptionPane.showMessageDialog(null, "ERROR: Event name cannot be null or empty");
 			}
-			if (cs.getInt(5) == 2) {
+			if (cs.getInt(6) == 2) {
 				JOptionPane.showMessageDialog(null, "ERROR: Holding date cannot be null or empty");
 			}
-			if (cs.getInt(5) == 3) {
+			if (cs.getInt(6) == 3) {
 				JOptionPane.showMessageDialog(null, "ERROR: Address cannot be null or empty");
 			}
+			if (cs.getInt(6) == 4) {
+				JOptionPane.showMessageDialog(null, "ERROR: System can't recognize the user. Please report this error massage to developers");
+			}
+			if (cs.getInt(6) == 5) {
+				JOptionPane.showMessageDialog(null, "ERROR: Check interest Type!");
+			}
+			if (cs.getInt(6) == 6) {
+				JOptionPane.showMessageDialog(null, "ERROR: Invalid date!");
+			}
+			if (cs.getInt(6) == 7) {
+				JOptionPane.showMessageDialog(null, "ERROR: Already created an exactly same event");
+			}
+			
 
 			return true;
 		} catch (SQLException e) {
@@ -262,8 +296,12 @@ public class EventsPanel extends JPanel {
 	 * @return sqlStatement: Final query
 	 */
 	private String buildParameterizedSqlStatementString() {
+		
+		
+		
+		
 		String sqlStatement = "SELECT EventName, Date, Address \nFROM Events\n";
-
+		
 		if (eNameCheck.isSelected()) {
 			sqlStatement = sqlStatement + " WHERE EventName Like ? \n";
 		}
