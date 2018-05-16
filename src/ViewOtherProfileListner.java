@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -28,9 +27,11 @@ public class ViewOtherProfileListner implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+//		JFrame frame1 = new JFrame();
+//		frame1.setSize(1000, 1000);
 		frame = new JFrame();
 		frame.setSize(1000, 1000);
-//		frame.removeAll();
+		frame.removeAll();
 		
 		for(Component c : frame.getContentPane().getComponents()){
             if(c instanceof JPanel){
@@ -63,7 +64,7 @@ public class ViewOtherProfileListner implements ActionListener {
 		frame.add(uname);
 		frame.add(searchedUName);
 		enterButton.addActionListener(new ViewProfileListner(initialUName,searchedUName,frame, dbc,false));
-		frame.add(changingPanel, BorderLayout.CENTER);
+//		frame1.add(changingPanel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
