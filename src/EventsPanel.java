@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,8 +25,7 @@ import javax.swing.JTextField;
  * 
  * Creates the panel displaying events
  *
- * @author garretje. Created Apr 26, 2018.
- * Edited by Yuhong
+ * @author garretje. Created Apr 26, 2018. Edited by Yuhong
  */
 public class EventsPanel extends JPanel {
 	Connection c = null;
@@ -36,23 +36,29 @@ public class EventsPanel extends JPanel {
 	JRadioButton eNameCheck;
 	JRadioButton eDateCheck;
 	JRadioButton eAddressCheck;
-	// interest related button group
+	JRadioButton iAnimalCheck;
+	JRadioButton iBookCheck;
+	JRadioButton iExerciseCheck;
+	JRadioButton iMusicCheck;
+	// Create interest related button group
 	JRadioButton aniCheck;
 	JRadioButton bookCheck;
 	JRadioButton exerCheck;
 	JRadioButton musicCheck;
+	JRadioButton noInterest;
 	// Create Event
 	JButton createEvent;
+
 	// prev/next page buttons
 	JButton prev;
 	JButton next;
 	int pageNum;
-	
+
 	String currEvent;
 
 	ArrayList<JTextField> temp;
 	// Result Set
-	ResultSet rs;
+	private ResultSet rs;
 
 	// ArrayList of event contents
 	ArrayList<JPanel> e;
@@ -68,12 +74,17 @@ public class EventsPanel extends JPanel {
 		eNameCheck = new JRadioButton("Search by event names");
 		eDateCheck = new JRadioButton("Search by dates");
 		eAddressCheck = new JRadioButton("Search by address");
-		
+
+		iAnimalCheck = new JRadioButton("Search by Animals");
+		iBookCheck = new JRadioButton("Search by Books");
+		iExerciseCheck = new JRadioButton("Search by Exercises");
+		iMusicCheck = new JRadioButton("Search by Music");
+
 		aniCheck = new JRadioButton("The interest is relate to Animals");
 		bookCheck = new JRadioButton("The interest is relate to Books");
 		exerCheck = new JRadioButton("The interest is relate to Exersices");
 		musicCheck = new JRadioButton("The interest is relate to Musics");
-		
+		noInterest = new JRadioButton("This event doesn't create any interest");
 		createEvent = new JButton("Create an event!");
 
 		prev = new JButton("<- previous");
@@ -84,13 +95,18 @@ public class EventsPanel extends JPanel {
 		eventGroup.add(eNameCheck);
 		eventGroup.add(eDateCheck);
 		eventGroup.add(eAddressCheck);
-		
+		eventGroup.add(iAnimalCheck);
+		eventGroup.add(iBookCheck);
+		eventGroup.add(iExerciseCheck);
+		eventGroup.add(iMusicCheck);
+
 		ButtonGroup interestGroup = new ButtonGroup();
 		interestGroup.add(aniCheck);
 		interestGroup.add(bookCheck);
 		interestGroup.add(exerCheck);
 		interestGroup.add(musicCheck);
-		
+		interestGroup.add(noInterest);
+
 		enterButton.addActionListener(new ButtonListener(this));
 		createEvent.addActionListener(new ButtonListener(this));
 		prev.addActionListener(new ButtonListener(this));
@@ -101,68 +117,65 @@ public class EventsPanel extends JPanel {
 		this.add(eNameCheck);
 		this.add(eDateCheck);
 		this.add(eAddressCheck);
+		this.add(iAnimalCheck);
+		this.add(iBookCheck);
+		this.add(iExerciseCheck);
+		this.add(iMusicCheck);
 		this.add(createEvent);
-
+		this.add(prev, BorderLayout.AFTER_LAST_LINE);
+		this.add(next);
+		
 		// Create event view
+		rs = buildGeneralEventResultSet();
 		e = this.eventView();
 		for (int i = 0; i < e.size(); i++) {
 			this.add(e.get(i));
 		}
 
-		this.add(prev, BorderLayout.AFTER_LAST_LINE);
-		this.add(next);
+		
 
 	}
 
 	private ArrayList<JPanel> eventView() {
-		rs = getEvents();
 		JPanel view;
 		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
+		if (rs == null) {
+			view = new JPanel();
+			JLabel noResult = new JLabel("No result...");
+			noResult.setForeground(Color.orange);
+			noResult.setFont(new Font("Serif", Font.BOLD, 50));
+			noResult.setBounds(300, 300, 200, 30);
+			view.add(noResult);
+			tempP.add(view);
+		}
 		try {
-			while (rs.next()) {
-				System.out.println(rs.getString(1) + " , " + rs.getString(2) + " , " + rs.getString(3));
-
+			while (rs != null && rs.next()) {
+				System.out.println(
+						rs.getString(1) + " , " + rs.getString(2) + " , " + rs.getString(3) + " , " + rs.getString(4));
 				view = new JPanel();
 				JLabel isolateLine = new JLabel("------------------------------------------------------------");
-				view.add(isolateLine);
 				view.add(new JLabel("Event Name: " + rs.getString(1)));
 				view.add(new JLabel("Date: " + rs.getString(2)));
 				view.add(new JLabel("Address: " + rs.getString(3)));
+				// if this event is owned by user
+				JButton deleteEvent = new JButton("delete this event");
+				JButton followEvent = new JButton("sign up!");
+				if (rs.getString(4).equals(this.username)) {
+					deleteEvent.addActionListener(new ButtonListener(username, rs.getInt(5), this));
+					view.add(deleteEvent);
+				} else {
+					followEvent.addActionListener(new ButtonListener(username, rs.getInt(5), this));
+				}
 				view.add(isolateLine);
 				tempP.add(view);
-
 			}
+
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
 
 		return tempP;
 
-	}
-
-	/**
-	 * retrieve data from mysql database under some conditions
-	 * 
-	 * @return result set of events
-	 */
-
-	public ResultSet getEvents() {
-		ResultSet tempRS = null;
-		String query = buildParameterizedSqlStatementString();
-		PreparedStatement stmt = null;
-		try {
-			System.out.println(query + this.currEvent);
-			stmt = c.prepareCall(query);
-			if (currEvent != null)
-				stmt.setString(1, "%" + currEvent + "%");
-			tempRS = stmt.executeQuery();
-
-		} catch (SQLException e) {
-			System.out.println(e);
-			JOptionPane.showMessageDialog(null, "Check a searching type.");
-			System.out.println("problem");
-		}
-		return tempRS;
 	}
 
 	/**
@@ -199,12 +212,12 @@ public class EventsPanel extends JPanel {
 
 		// Event creates interest *: text box
 		JLabel interest = new JLabel("Interest: ");
-		JTextField interestField = new JTextField("Name of Interest");
+		JTextField interestField = new JTextField("Name of the interest");
+		System.out.println(interestField.getText().length());
 		interest.setForeground(Color.BLACK);
 		interest.setFont(new Font("Serif", Font.BOLD, 20));
 		interestField.setBounds(500, 250, 100, 20);
-		
-		
+
 		// Buttons
 		// JButton addPic = new JButton("I want to add a picture");
 		// addPic.addActionListener(new ButtonListener(this));
@@ -218,6 +231,13 @@ public class EventsPanel extends JPanel {
 		createEventPanel.add(dateField, BorderLayout.CENTER);
 		createEventPanel.add(address);
 		createEventPanel.add(addressField, BorderLayout.CENTER);
+
+		createEventPanel.add(aniCheck);
+		createEventPanel.add(bookCheck);
+		createEventPanel.add(exerCheck);
+		createEventPanel.add(musicCheck);
+		createEventPanel.add(noInterest);
+
 		createEventPanel.add(interest);
 		createEventPanel.add(interestField);
 		createEventPanel.add(confirm, BorderLayout.SOUTH);
@@ -248,40 +268,56 @@ public class EventsPanel extends JPanel {
 	public boolean createEvent(String EventName, String Date, String Address, String interest) {
 		CallableStatement cs = null;
 		try {
-			cs = this.c.prepareCall("{call CreateEvent(?,?,?,?,?)}");
+
+			cs = this.c.prepareCall("{call CreateEvent(?,?,?,?,?,?,?)}");
 			cs.setString(1, EventName);
 			cs.setString(2, Date);
 			cs.setString(3, Address);
-			cs.setString(4, interest);
-			cs.setString(5, interest);
-			cs.registerOutParameter(5, java.sql.Types.INTEGER);
+			cs.setString(4, username);
+
+			if (aniCheck.isSelected())
+				cs.setString(5, "Animal");
+			else if (bookCheck.isSelected())
+				cs.setString(5, "Book");
+			else if (exerCheck.isSelected())
+				cs.setString(5, "Exercise");
+			else if (musicCheck.isSelected())
+				cs.setString(5, "Music");
+			else 
+				cs.setString(5, null);
+			cs.setString(6, interest);
+			cs.registerOutParameter(7, java.sql.Types.INTEGER);
 			cs.execute();
-			if (cs.getInt(6) == 0) {
+			if (cs.getInt(7) == 0) {
 				JOptionPane.showMessageDialog(null, "successfully created!");
 			}
-			if (cs.getInt(6) == 1) {
+			if (cs.getInt(7) == 1) {
 				JOptionPane.showMessageDialog(null, "ERROR: Event name cannot be null or empty");
 			}
-			if (cs.getInt(6) == 2) {
+			if (cs.getInt(7) == 2) {
 				JOptionPane.showMessageDialog(null, "ERROR: Holding date cannot be null or empty");
 			}
-			if (cs.getInt(6) == 3) {
+			if (cs.getInt(7) == 3) {
 				JOptionPane.showMessageDialog(null, "ERROR: Address cannot be null or empty");
 			}
-			if (cs.getInt(6) == 4) {
-				JOptionPane.showMessageDialog(null, "ERROR: System can't recognize the user. Please report this error massage to developers");
+			if (cs.getInt(7) == 4) {
+				JOptionPane.showMessageDialog(null,
+						"ERROR: System can't recognize the user. Please report this error massage to developers");
 			}
-			if (cs.getInt(6) == 5) {
-				JOptionPane.showMessageDialog(null, "ERROR: Check interest Type!");
-			}
-			if (cs.getInt(6) == 6) {
+//			if (cs.getInt(7) == 5) {
+//				JOptionPane.showMessageDialog(null, "ERROR: Check interest Type!");
+//			}
+			if (cs.getInt(7) == 6) {
 				JOptionPane.showMessageDialog(null, "ERROR: Invalid date!");
 			}
-			if (cs.getInt(6) == 7) {
-				JOptionPane.showMessageDialog(null, "ERROR: Already created an exactly same event");
+			if (cs.getInt(7) == 7) {
+				JOptionPane.showMessageDialog(null,
+						"ERROR: A user can't create two event which are hold at the same time");
 			}
-			
-
+			if (cs.getInt(7) == 8) {
+				JOptionPane.showMessageDialog(null,
+						"ERROR: Can't recognize the interest. Please type in proper interest name or create a new interest!");
+			}
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -290,63 +326,188 @@ public class EventsPanel extends JPanel {
 
 	}
 
-	/**
-	 * Build a query
-	 * 
-	 * @return sqlStatement: Final query
-	 */
-	private String buildParameterizedSqlStatementString() {
-		
-		
-		
-		
-		String sqlStatement = "SELECT EventName, Date, Address \nFROM Events\n";
-		
-		if (eNameCheck.isSelected()) {
-			sqlStatement = sqlStatement + " WHERE EventName Like ? \n";
+	private ResultSet buildGeneralEventResultSet() {
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		try {
+			cs = this.c.prepareCall("{call ViewEvents(?,?,?,?,?)}");
+			cs.registerOutParameter(1, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(2, java.sql.Types.DATE);
+			cs.registerOutParameter(3, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(5, java.sql.Types.INTEGER);
+			rs = cs.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		if (eDateCheck.isSelected()) {
-			sqlStatement = sqlStatement + " WHERE date = ? \n";
-		}
-		if (eAddressCheck.isSelected()) {
-			sqlStatement = sqlStatement + " WHERE address LIKE ? \n";
-		}
-		sqlStatement = sqlStatement + "ORDER BY ID DESC LIMIT 5;\n";
-
-		return sqlStatement;
+		return rs;
 	}
 
-	class ButtonListener implements ActionListener {
+	private ResultSet buildSearchResultSet() {
+		CallableStatement cs = null;
+		ResultSet rs = null;
+		try {
+			cs = this.c.prepareCall("{call SearchEvents(?,?,?,?,?,?,?,?,?,?)}");
+
+			if (eNameCheck.isSelected()) {
+				cs.setString(1, this.searchbox.getText());
+				cs.setString(2, null);
+				cs.setString(3, null);
+				cs.setString(8, null);
+				cs.setString(9, null);
+
+			} else if (eDateCheck.isSelected()) {
+				cs.setString(1, null);
+				cs.setString(2, this.searchbox.getText());
+				cs.setString(3, null);
+				cs.setString(8, null);
+				cs.setString(9, null);
+
+			} else if (eAddressCheck.isSelected()) {
+				cs.setString(1, null);
+				cs.setString(2, null);
+				cs.setString(3, this.searchbox.getText());
+				cs.setString(8, null);
+				cs.setString(9, null);
+
+			} else if (iAnimalCheck.isSelected()) {
+				cs.setString(1, null);
+				cs.setString(2, null);
+				cs.setString(3, null);
+				cs.setString(8, this.searchbox.getText());
+				cs.setString(9, "Animal");
+			} else if (iBookCheck.isSelected()) {
+				cs.setString(1, null);
+				cs.setString(2, null);
+				cs.setString(3, null);
+				cs.setString(8, this.searchbox.getText());
+				cs.setString(9, "Book");
+			} else if (iExerciseCheck.isSelected()) {
+				cs.setString(1, null);
+				cs.setString(2, null);
+				cs.setString(3, null);
+				cs.setString(8, this.searchbox.getText());
+				cs.setString(9, "Exercise");
+			} else if (iMusicCheck.isSelected()) {
+				cs.setString(1, null);
+				cs.setString(2, null);
+				cs.setString(3, null);
+				cs.setString(8, this.searchbox.getText());
+				cs.setString(9, "Music");
+			} else {
+				JOptionPane.showMessageDialog(null, "Please check searching option!");
+				return null;
+			}
+			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(5, java.sql.Types.DATE);
+			cs.registerOutParameter(6, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
+			cs.registerOutParameter(10, java.sql.Types.INTEGER);
+			rs = cs.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	
+	private boolean signUpEvent(int id){
+		CallableStatement cs = null;
+		try {
+			cs = this.c.prepareCall("{call DeletePosts(?,?,?)}");
+			cs.setInt(1,id);
+			cs.setString(2, username);
+			cs.registerOutParameter(3, java.sql.Types.INTEGER);
+			cs.execute();
+			if(cs.getInt(3) == 1){
+				JOptionPane.showMessageDialog(null, "System can not recognize the post! Report to devolopers!");
+			} else if(cs.getInt(3) == 1){
+				JOptionPane.showMessageDialog(null, "No post can not be deleted!");
+			} else{
+				JOptionPane.showMessageDialog(null, "successed!");
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private boolean deleteFromDB(int id) {
+		CallableStatement cs = null;
+		try {
+			cs = this.c.prepareCall("{call DeleteEvents(?,?,?)}");
+			cs.setInt(1, id);
+			cs.setString(2, username);
+			cs.registerOutParameter(3, java.sql.Types.INTEGER);
+			cs.execute();
+			if(cs.getInt(3) == 1){
+				JOptionPane.showMessageDialog(null,"System can not recognize Event! Report to devolopers!");
+			} else if(cs.getInt(3) == 2){
+				JOptionPane.showMessageDialog(null,"No event can not be deleted!");
+			} else if(cs.getInt(3) == 0){
+				JOptionPane.showMessageDialog(null,"successed!");
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	// Button listener
+
+	public class ButtonListener implements ActionListener {
 		EventsPanel pan;
+		String username;
+		int id;
 
 		public ButtonListener(EventsPanel p) {
 			pan = p;
 		}
 
+		public ButtonListener(String username, int id, EventsPanel p) {
+			this.pan = p;
+			this.username = username;
+			this.id = id;
+		}
+
 		public void actionPerformed(ActionEvent arg0) {
 			if (arg0.getActionCommand().equals("Enter")) {
-				currEvent = searchbox.getText();
 				while (!e.isEmpty())
 					pan.remove(e.remove(0));
+				rs = buildSearchResultSet();
 				e = eventView();
 				for (int i = 0; i < e.size(); i++) {
 					pan.add(e.get(i));
 				}
-
 			} else if (arg0.getActionCommand().equals("Create an event!")) {
 				temp = addEventPanel();
-				// } else if (arg0.getActionCommand().equals("I want to add a
-				// picture")){
-
 			} else if (arg0.getActionCommand().equals("Confirm")) {
 				ArrayList<String> eventAspects = new ArrayList<>();
 
 				for (int i = 0; i < 4; i++) {
 					eventAspects.add(temp.get(i).getText());
 				}
-				createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), eventAspects.get(3));
-				temp = null;
-
+				System.out.println("interest: " + eventAspects.get(3).equals("Name of the interest"));
+				if(eventAspects.get(3).length() == 0 || eventAspects.get(3).equals("Name of the interest"))
+					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), null);
+				else{
+					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), eventAspects.get(3));
+				}
+			} else if (arg0.getActionCommand().equals("delete this event")) {
+				System.out.println("delete!");
+				// call delete event sproc
+				deleteFromDB(id);
+				// refresh the panel
+				while (!e.isEmpty())
+					pan.remove(e.remove(0));
+				rs = buildGeneralEventResultSet();
+				e = eventView();
+				for (int i = 0; i < e.size(); i++) {
+					pan.add(e.get(i));
+				}
+			} else if (arg0.getActionCommand().equals("sign up!")) {
+				// go sign up
+				signUpEvent(id);
 			} else if (arg0.getActionCommand().equals("<- previous")) {
 
 			} else if (arg0.getActionCommand().equals("next ->")) {

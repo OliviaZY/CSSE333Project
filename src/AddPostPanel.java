@@ -45,26 +45,25 @@ public class AddPostPanel extends JPanel{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getActionCommand().equals("commit!")){
-				createPosts(ar.get(0).getText(), username, ar.get(1).getText()); 
+				createPosts(ar.get(0).getText(), username); 
 			}
 			
 		}
 		
 	}
 
-	public boolean createPosts(String text, String poster, String picture) {
+	public boolean createPosts(String text, String poster) {
 		CallableStatement cs = null;
 		try {
-			cs = this.c.prepareCall("{call CreatePosts(?,?,?,?)}");
+			cs = this.c.prepareCall("{call CreatePosts(?,?,?)}");
 			cs.setString(1, text);
 			cs.setString(2, poster);
-			cs.setString(3, picture);
-			cs.registerOutParameter(4, java.sql.Types.INTEGER);
+			cs.registerOutParameter(3,java.sql.Types.INTEGER);
 			cs.execute();
-			if (cs.getInt(4) == 0) {
+			if (cs.getInt(3) == 0) {
 				JOptionPane.showMessageDialog(null, "successfully created!");
 			}
-			if (cs.getInt(4) == 1) {
+			if (cs.getInt(3) == 1) {
 				JOptionPane.showMessageDialog(null, "ERROR: Text cannot be null or empty");
 			}
 			return true;
