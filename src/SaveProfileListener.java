@@ -47,11 +47,16 @@ public class SaveProfileListener implements ActionListener {
 		frame.setVisible(false);
 		String sDate1 = this.DBirthJ.getText();
 		System.out.println(this.DBirthJ.getText());
-		System.out.println("this is a test for sDate1");
+		System.out.println("this is a test for sDate1:'" + sDate1+"'");
+		
 		if (sDate1 != "" || sDate1 != null || sDate1 != "yyyy-mm-dd") {
-			try {
-				date1 = new SimpleDateFormat("yyyy-mm-dd").parse(sDate1);
+			try {	
+				if (sDate1.length() !=0){
+					System.out.println("im here for testing null birthd");
+					date1 = new SimpleDateFormat("yyyy-mm-dd").parse(sDate1);					
+				}
 			} catch (ParseException exception) {
+				JOptionPane.showMessageDialog(null, "birthday cannot be null!!!!!!");
 				// TODO Auto-generated catch-block stub.
 				exception.printStackTrace();
 			}
@@ -62,7 +67,7 @@ public class SaveProfileListener implements ActionListener {
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call SaveProfile(?,?,?,?,?,?,?,?,?)");
 			cs.setString(1, uname);
-			if (sDate1 == "" ||sDate1 == null || sDate1.equals("yyyy-mm-dd")){
+			if (sDate1.length() ==0){
 				cs.setDate(2, null);
 			}else{
 				cs.setDate(2, new Date(date1.getTime()));
