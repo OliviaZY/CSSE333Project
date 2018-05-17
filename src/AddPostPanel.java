@@ -28,7 +28,7 @@ public class AddPostPanel extends JPanel{
 		posts.setBounds(1000, 50, 400, 300);
 
 		commit = new JButton("commit!");
-		commit.addActionListener(new CommitListener(username));
+		commit.addActionListener(new CommitListener(username,createPostFrame));
 		createPostPanel.add(posts);
 		ar.add(posts);
 		createPostPanel.add(commit);
@@ -38,16 +38,18 @@ public class AddPostPanel extends JPanel{
 	
 	class CommitListener implements ActionListener{
 		String username;
-		public CommitListener(String username) {
+		JFrame f;
+		public CommitListener(String username, JFrame f) {
 			this.username = username;
+			this.f = f;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getActionCommand().equals("commit!")){
 				createPosts(ar.get(0).getText(), username); 
-			}
-			
+				f.setVisible(false);
+			}				
 		}
 		
 	}
