@@ -8,9 +8,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class ViewFriendListListner implements ActionListener {
@@ -19,6 +21,7 @@ public class ViewFriendListListner implements ActionListener {
 	private Connection dbc;
 	private JTextField username;
 	static JLabel l3;
+	private JPanel buttonPanel;
 
 	public ViewFriendListListner(JTextField tf1, JFrame frame1, Connection dbc) {
 		this.frame = frame;
@@ -29,7 +32,10 @@ public class ViewFriendListListner implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		JFrame frame1 = new JFrame();
+		buttonPanel = new JPanel();
+		
 		frame1.setSize(1000, 1000);
+		
 
 		try {
 			// check if the user name is contained in the usernameinit attribute
@@ -58,34 +64,53 @@ public class ViewFriendListListner implements ActionListener {
 				while (rs.next()) {
 					System.out.println(i);
 					JLabel l1 = new JLabel(rs.getString(1));
-					System.out.println("this is a test for select the first row in the result set");
-					l1.setBounds(100, 200 * i, 200, 30);
+					JButton jb = new JButton("See posts from " + rs.getString(1));
+					l1.setBounds(100, 200 * i+100, 200, 30);
 					l1.setForeground(Color.blue);
 					l1.setFont(new Font("Serif", Font.BOLD, 40));
+					jb.addActionListener(new viewFriendPostListener(rs.getString(1)));
+
 					frame1.add(l1);
+					buttonPanel.add(jb);
 					i++;
 				}
 				if (ret2 == 3) {
 					while (rs2.next()) {
 						System.out.println(i);
 						JLabel l1 = new JLabel(rs2.getString(1));
+						JButton jb = new JButton("See posts from " + rs2.getString(1));
 						System.out.println("this is a test for select the first row in the result set");
-						l1.setBounds(100, 200 * i, 200, 30);
+						l1.setBounds(100, 200 * i + 100, 200, 30);
 						l1.setForeground(Color.blue);
 						l1.setFont(new Font("Serif", Font.BOLD, 40));
+						jb.addActionListener(new viewFriendPostListener(rs2.getString(1)));
 						frame1.add(l1);
+						buttonPanel.add(jb);
 						i++;
 					}
 				}
 
 
 			}
+			frame1.add(buttonPanel);
 			frame1.setVisible(true);
 
 		} catch (SQLException var13) {
 			var13.printStackTrace();
 			JOptionPane.showMessageDialog((Component) null, "view friend failed");
 		}
+	}
+	class viewFriendPostListener implements ActionListener{
+		String usersname;
+		public viewFriendPostListener(String string) {
+			usersname = string;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			new ViewFriendPost(dbc,usersname,username.getText());
+		}
+		
 	}
 
 }
