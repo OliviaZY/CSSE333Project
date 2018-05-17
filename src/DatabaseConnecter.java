@@ -15,7 +15,6 @@ public class DatabaseConnecter {
 
 	public DatabaseConnecter(){
 		try{
-			//TODO: This probably shouldn't be hardcoded to root and chooKah
 			con = DriverManager.getConnection(DB_URL, "root", "chooKah7");
 		}
 		catch(SQLException s){
