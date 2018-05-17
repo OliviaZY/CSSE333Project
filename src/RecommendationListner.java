@@ -81,7 +81,7 @@ public class RecommendationListner implements ActionListener {
 		    	
 		    	selected = buildQuery();
 				System.out.println("test for selected recommendation "+selected);
-				new ListOfRecommendationUserListener(selected,userN, dbc).actionPerformed(e);
+				new ListOfRecommendationUserListener(selected,userN,frame, dbc).actionPerformed(e);
 				
 		    }});
 

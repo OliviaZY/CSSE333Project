@@ -30,11 +30,13 @@ public class ListOfRecommendationUserListener {
 	JRadioButton favMusic;
 	JRadioButton favAni;
 	JRadioButton favExer;
+	private JFrame frame;
 
-	public ListOfRecommendationUserListener(String selected, JTextField userN, Connection dbc) {
+	public ListOfRecommendationUserListener(String selected, JTextField userN, JFrame frame,Connection dbc) {
 		this.userN = userN;
 		this.selected = selected;
 		this.dbc = dbc;
+		this.frame = frame;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -98,16 +100,28 @@ public class ListOfRecommendationUserListener {
 
 				}
 				int i = 0;
-				JLabel[] l1 = new JLabel[returnedInt];
+//				JLabel[] l1 = new JLabel[returnedInt];
 				while (rs.next()) {
+					JLabel l1 = new JLabel(rs.getString(1));
+					JButton jb = new JButton("View profile of " + rs.getString(1));
+					l1.setBounds(100, 200 * i+100, 200, 30);
+					jb.setBounds(400,200*i+100,200,30);
+					l1.setForeground(Color.blue);
+					jb.setForeground(Color.blue);
+					l1.setFont(new Font("Serif", Font.BOLD, 40));
+					jb.addActionListener(new ViewProfileListner(userN.getText(),new JTextField(rs.getString(1)),frame,dbc,false));
+
+					frame1.add(jb);
+					frame1.add(l1);
+					i++;
 
 					// System.out.println(i);
-					l1[i] = new JLabel(rs.getString(1));
-					l1[i].setBounds(100, 100 * i, 200, 30);
-					l1[i].setForeground(Color.blue);
-					l1[i].setFont(new Font("Serif", Font.BOLD, 40));
-					frame1.add(l1[i]);
-					i++;
+//					l1[i] = new JLabel(rs.getString(1));
+//					l1[i].setBounds(100, 100 * i, 200, 30);
+//					l1[i].setForeground(Color.blue);
+//					l1[i].setFont(new Font("Serif", Font.BOLD, 40));
+//					frame1.add(l1[i]);
+//					i++;
 				}
 
 				for (int x = 0; x < returnedInt; x++) {
