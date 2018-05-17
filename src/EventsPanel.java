@@ -50,8 +50,6 @@ public class EventsPanel extends JPanel {
 	JButton createEvent;
 
 	// prev/next page buttons
-	JButton prev;
-	JButton next;
 	int pageNum;
 
 	String currEvent;
@@ -87,8 +85,7 @@ public class EventsPanel extends JPanel {
 		noInterest = new JRadioButton("This event doesn't create any interest");
 		createEvent = new JButton("Create an event!");
 
-		prev = new JButton("<- previous");
-		next = new JButton("next ->");
+
 
 		// add search events button group
 		ButtonGroup eventGroup = new ButtonGroup();
@@ -109,8 +106,8 @@ public class EventsPanel extends JPanel {
 
 		enterButton.addActionListener(new ButtonListener(this));
 		createEvent.addActionListener(new ButtonListener(this));
-		prev.addActionListener(new ButtonListener(this));
-		next.addActionListener(new ButtonListener(this));
+//		prev.addActionListener(new ButtonListener(this));
+//		next.addActionListener(new ButtonListener(this));
 
 		this.add(searchbox, BorderLayout.WEST);
 		this.add(enterButton);
@@ -122,8 +119,8 @@ public class EventsPanel extends JPanel {
 		this.add(iExerciseCheck);
 		this.add(iMusicCheck);
 		this.add(createEvent);
-		this.add(prev, BorderLayout.AFTER_LAST_LINE);
-		this.add(next);
+//		this.add(prev, BorderLayout.AFTER_LAST_LINE);
+//		this.add(next);
 		
 		// Create event view
 		rs = buildGeneralEventResultSet();
@@ -165,6 +162,7 @@ public class EventsPanel extends JPanel {
 					view.add(deleteEvent);
 				} else {
 					followEvent.addActionListener(new ButtonListener(username, rs.getInt(5), this));
+					view.add(followEvent);
 				}
 				view.add(isolateLine);
 				tempP.add(view);
@@ -222,7 +220,7 @@ public class EventsPanel extends JPanel {
 		// JButton addPic = new JButton("I want to add a picture");
 		// addPic.addActionListener(new ButtonListener(this));
 		JButton confirm = new JButton("Confirm");
-		confirm.addActionListener(new ButtonListener(this));
+		confirm.addActionListener(new ButtonListener(this,createEventFrame));
 
 		// add J components into a Panel
 		createEventPanel.add(eName);
@@ -267,8 +265,23 @@ public class EventsPanel extends JPanel {
 
 	public boolean createEvent(String EventName, String Date, String Address, String interest) {
 		CallableStatement cs = null;
+		// check if the date is valid 
+		if(Date.length() != 10){
+			JOptionPane.showMessageDialog(null, "Please type in a valid date!");
+			return false;
+		}else{
+			for(int i = 0; i < Date.length(); i++){
+				if(Date.charAt(i) < '0' || Date.charAt(i) > '9'){
+					if(i == 4 || i == 7){
+						if(Date.charAt(i) == '-') continue;
+					}
+					JOptionPane.showMessageDialog(null, "Please type in a valid date!");
+					return false;
+				}
+			}
+		}
 		try {
-
+			
 			cs = this.c.prepareCall("{call CreateEvent(?,?,?,?,?,?,?)}");
 			cs.setString(1, EventName);
 			cs.setString(2, Date);
@@ -285,11 +298,14 @@ public class EventsPanel extends JPanel {
 				cs.setString(5, "Music");
 			else 
 				cs.setString(5, null);
+			
 			cs.setString(6, interest);
 			cs.registerOutParameter(7, java.sql.Types.INTEGER);
+			System.out.println(cs);
 			cs.execute();
 			if (cs.getInt(7) == 0) {
 				JOptionPane.showMessageDialog(null, "successfully created!");
+				
 			}
 			if (cs.getInt(7) == 1) {
 				JOptionPane.showMessageDialog(null, "ERROR: Event name cannot be null or empty");
@@ -459,6 +475,12 @@ public class EventsPanel extends JPanel {
 		EventsPanel pan;
 		String username;
 		int id;
+		JFrame f;
+		
+		public ButtonListener(EventsPanel p, JFrame f){
+			pan = p;
+			this.f = f;
+		}
 
 		public ButtonListener(EventsPanel p) {
 			pan = p;
@@ -486,13 +508,16 @@ public class EventsPanel extends JPanel {
 
 				for (int i = 0; i < 4; i++) {
 					eventAspects.add(temp.get(i).getText());
+					System.out.println("--" + temp.get(i).getText());
 				}
 				System.out.println("interest: " + eventAspects.get(3).equals("Name of the interest"));
 				if(eventAspects.get(3).length() == 0 || eventAspects.get(3).equals("Name of the interest"))
+					
 					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), null);
 				else{
 					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), eventAspects.get(3));
 				}
+				f.setVisible(false);
 			} else if (arg0.getActionCommand().equals("delete this event")) {
 				System.out.println("delete!");
 				// call delete event sproc
@@ -508,11 +533,7 @@ public class EventsPanel extends JPanel {
 			} else if (arg0.getActionCommand().equals("sign up!")) {
 				// go sign up
 				signUpEvent(id);
-			} else if (arg0.getActionCommand().equals("<- previous")) {
-
-			} else if (arg0.getActionCommand().equals("next ->")) {
-
-			}
+			} 
 			pan.repaint();
 			pan.revalidate();
 		}
