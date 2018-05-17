@@ -2,18 +2,13 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Random;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -54,22 +49,11 @@ public class LogInListener implements ActionListener {
 		CallableStatement cs = null;
 
 		try {
-			cs = this.dbc.prepareCall("call Login(?,?,?)");
-			cs.setString(1, tf1.getText());
-			cs.setString(2, p1.getText());
-			cs.registerOutParameter(3, java.sql.Types.INTEGER);
-			System.out.println(cs);
-			cs.execute();
-			int ret = cs.getInt(3);
-			if (ret == 1) {
-				JOptionPane.showMessageDialog((Component)null, "ERROR: user name cannot be empty");
-			} else if (ret == 2) {
-				JOptionPane.showMessageDialog((Component)null, "ERROR: password cannot be empty.");
-			} else if (ret == 3) {
-				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect user name.");
-			} else if(ret == 4){
-				JOptionPane.showMessageDialog((Component)null, "ERROR: incorrect password.");
-			}else{
+			PasswordHasher pass = new PasswordHasher(dbc);
+		if (!pass.login(tf1.getText(), p1.getText()))
+			JOptionPane.showMessageDialog(null, "Login Failed");
+
+		else {
 					JFrame frame1 = new JFrame();
 					frame1.setSize(1000, 1000);
 					//This is the panel that's going to change when you click the link
@@ -88,7 +72,7 @@ public class LogInListener implements ActionListener {
 					}else{
 						buttonLinks = new JButton[8];
 					}
-					System.out.println("this is a test for notification for friend request");
+					//System.out.println("this is a test for notification for friend request");
 					//Link buttons on the left side of the screen
 //					Box links = Box.createVerticalBox();
 //					JButton[] buttonLinks = new JButton[7];
@@ -118,38 +102,10 @@ public class LogInListener implements ActionListener {
 				}
 				
 			}catch (SQLException exception) {
-			// TODO Auto-generated catch-block stub.
 			exception.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Login Failed");
 		}
 
 }
-	public byte[] getNewSalt() {
-		byte[] salt = new byte[16];
-		RANDOM.nextBytes(salt);
-		return salt;
-	}
 	
-	public String getStringFromBytes(byte[] data) {
-		return enc.encodeToString(data);
-	}
-
-	public String hashPassword(byte[] salt, String password) {
-
-		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-		SecretKeyFactory f;
-		byte[] hash = null;
-		try {
-			f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-			hash = f.generateSecret(spec).getEncoded();
-		} catch (NoSuchAlgorithmException e) {
-			JOptionPane.showMessageDialog(null, "An error occurred during password hashing. See stack trace.");
-			e.printStackTrace();
-		} catch (InvalidKeySpecException e) {
-			JOptionPane.showMessageDialog(null, "An error occurred during password hashing. See stack trace.");
-			e.printStackTrace();
-		}
-		return getStringFromBytes(hash);
-	}
-
 }

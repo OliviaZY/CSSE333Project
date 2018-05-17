@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -31,7 +30,6 @@ public class MainPagePosts extends JPanel {
 		for (int i = 0; i < tempP.size(); i++) {
 			this.add(tempP.get(i));
 		}
-		System.out.println("Username in mainposts constructor: " + this.username);
 	}
 
 	private void buildResultSet() {
