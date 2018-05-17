@@ -11,6 +11,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -277,8 +278,17 @@ public class InterestsPanel extends JPanel {
 				stmt.setString(1,col);
 				stmt.setString(2, this.currInterest);
 				if (type.equalsIgnoreCase("SearchMusic")){
-					if (col.equals("YearPub"))
-						stmt.setInt(3, Integer.parseInt(this.currInterest));
+					if (col.equals("YearPub")){
+						int year; 
+						try {
+							year = Integer.parseInt(this.currInterest);
+							stmt.setInt(3, Integer.parseInt(this.currInterest));
+						}
+						catch (NumberFormatException e){
+							JOptionPane.showMessageDialog(null, "Error: please enter a number");
+							throw new SQLException();
+						}
+					}
 					else
 						stmt.setInt(3, 0);
 
@@ -300,6 +310,8 @@ public class InterestsPanel extends JPanel {
 			}
 			catch(SQLException e){
 				System.out.println("problem");
+				JOptionPane.showMessageDialog(null, "Error: please try again");
+
 			}
 			
 		}
