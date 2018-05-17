@@ -85,7 +85,6 @@ public class MyInterests extends JPanel {
 		try {
 			CallableStatement stm = con.prepareCall("{Call ListPersonInterests(?)}");
 			stm.setString(1,username);
-			System.out.println(username);
 			ResultSet results = stm.executeQuery();
 
 			while(results.next()){	
@@ -118,6 +117,31 @@ public class MyInterests extends JPanel {
 
 	}
 	
+	private void checkInputType(){
+		
+		if (enterName.getText().equals("") || (enterName.getText().length() > 10 && enterName.getText().substring(0,11).equals("Enter the ") 
+				)){
+			JOptionPane.showMessageDialog(getThis(),"Please fill out all fields",
+			         "Error",JOptionPane.ERROR_MESSAGE); 
+		}
+		if (enterType.getText().equals("") || (enterType.getText().length() > 10 && enterType.getText().substring(0,11).equals("Enter the ") 
+				)){			JOptionPane.showMessageDialog(getThis(),"Please fill out all fields",
+			         "Error",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	private void checkMusicInputType(){
+		if (enterMusYear.getText().equals("") || (enterMusYear.getText().length() > 10 && enterMusYear.getText().substring(0,11).equals("Enter the ") 
+				)){
+			JOptionPane.showMessageDialog(getThis(),"Please fill out all fields",
+			         "Error",JOptionPane.ERROR_MESSAGE); 
+		}
+		if (enterMusTheme.getText().equals("") || (enterMusTheme.getText().length() > 10 && enterMusTheme.getText().substring(0,11).equals("Enter the ") 
+				)){
+			JOptionPane.showMessageDialog(getThis(),"Please fill out all fields",
+			         "Error",JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
 	class DeleteActionListener implements ActionListener{
 
 		@Override
@@ -125,6 +149,7 @@ public class MyInterests extends JPanel {
 			int result;
 			try{
 				checkInputLength();
+				checkInputType();
 			if (selectButtons[0].isSelected()){//book is selected
 				
 				CallableStatement stm = con.prepareCall("{call DeletePersonalBook(?,?,?,?)}");
@@ -149,6 +174,7 @@ public class MyInterests extends JPanel {
 //				JOptionPane.showMessageDialog(getThis(),"Invalid Year Input",
 //				         "Error",JOptionPane.ERROR_MESSAGE);
 //			}
+				checkMusicInputType();
 			if (enterMusTheme.getText().length() > 20){
 				enterMusTheme.setText(enterMusTheme.getText().substring(0,19));
 			}
@@ -186,6 +212,8 @@ public class MyInterests extends JPanel {
 			int result;
 			try{
 				checkInputLength();
+				checkInputType();
+				checkInputLength();
 			if (selectButtons[0].isSelected()){//book is selected
 				if (enterName.getText().length() > 20){
 					enterName.setText(enterName.getText().substring(0,19));
@@ -216,6 +244,7 @@ public class MyInterests extends JPanel {
 //				JOptionPane.showMessageDialog(getThis(),"Invalid Year Input",
 //				         "Error",JOptionPane.ERROR_MESSAGE);
 //			}
+				checkMusicInputType();
 			if (enterMusTheme.getText().length() > 20){
 				enterMusTheme.setText(enterMusTheme.getText().substring(0,19));
 			}

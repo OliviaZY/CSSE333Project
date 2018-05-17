@@ -47,22 +47,29 @@ public class SaveProfileListener implements ActionListener {
 		frame.setVisible(false);
 		String sDate1 = this.DBirthJ.getText();
 		System.out.println(this.DBirthJ.getText());
-		System.out.println("this is a test for sDate1");
-		if (sDate1 != "" || sDate1 != null || sDate1 != "yyyy-mm-dd") {
+		System.out.println("this is a test for sDate1:'" + sDate1+"'");
+		
+		if (sDate1.length() ==0 || sDate1 == "yyyy-mm-dd") {
+			
+					System.out.println("im here for testing null birthd");
+//					date1 = new SimpleDateFormat("yyyy-mm-dd").parse(sDate1);					
+					JOptionPane.showMessageDialog(null, "incorrect syntax for birthday!!!!!!");
+					this.date1 = null;
+			
+		}else{
 			try {
 				date1 = new SimpleDateFormat("yyyy-mm-dd").parse(sDate1);
 			} catch (ParseException exception) {
 				// TODO Auto-generated catch-block stub.
-				exception.printStackTrace();
-			}
-		}else{
-			this.date1 = null;
+				this.date1 = null;
+				JOptionPane.showMessageDialog(null, "incorrect syntax for birthday!!!!!!");
+			}	
 		}
 		// java.util.Date date = SimpleDateFormat.parse(pattern);
 		try {
 			CallableStatement cs = this.dbc.prepareCall("call SaveProfile(?,?,?,?,?,?,?,?,?)");
 			cs.setString(1, uname);
-			if (sDate1 == "" ||sDate1 == null || sDate1.equals("yyyy-mm-dd")){
+			if (sDate1.length() ==0 || this.date1 == null){
 				cs.setDate(2, null);
 			}else{
 				cs.setDate(2, new Date(date1.getTime()));
