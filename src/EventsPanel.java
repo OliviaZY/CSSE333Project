@@ -161,7 +161,7 @@ public class EventsPanel extends JPanel {
 					deleteEvent.addActionListener(new ButtonListener(username, rs.getInt(5), this));
 					view.add(deleteEvent);
 				} else {
-					followEvent.addActionListener(new ButtonListener(username, rs.getInt(5), this));
+					followEvent.addActionListener(new ButtonListener(username, rs.getInt(5), this,followEvent));
 					view.add(followEvent);
 				}
 				view.add(isolateLine);
@@ -169,7 +169,13 @@ public class EventsPanel extends JPanel {
 			}
 
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+			view = new JPanel();
+			JLabel noResult = new JLabel("No result...");
+			noResult.setForeground(Color.orange);
+			noResult.setFont(new Font("Serif", Font.BOLD, 50));
+			noResult.setBounds(300, 300, 200, 30);
+			view.add(noResult);
+			tempP.add(view);
 		}
 
 		return tempP;
@@ -303,7 +309,7 @@ public class EventsPanel extends JPanel {
 			cs.registerOutParameter(7, java.sql.Types.INTEGER);
 			System.out.println(cs);
 			cs.execute();
-			if (cs.getInt(7) == 0) {
+			if (cs.getInt(7) == 10) {
 				JOptionPane.showMessageDialog(null, "successfully created!");
 				
 			}
@@ -429,16 +435,42 @@ public class EventsPanel extends JPanel {
 	private boolean signUpEvent(int id){
 		CallableStatement cs = null;
 		try {
-			cs = this.c.prepareCall("{call DeletePosts(?,?,?)}");
+			cs = this.c.prepareCall("{call Go_Sign_up(?,?,?)}");
 			cs.setInt(1,id);
 			cs.setString(2, username);
 			cs.registerOutParameter(3, java.sql.Types.INTEGER);
 			cs.execute();
 			if(cs.getInt(3) == 1){
-				JOptionPane.showMessageDialog(null, "System can not recognize the post! Report to devolopers!");
-			} else if(cs.getInt(3) == 1){
-				JOptionPane.showMessageDialog(null, "No post can not be deleted!");
-			} else{
+				JOptionPane.showMessageDialog(null, "System can not recognize the username! Report to devolopers!");
+			} else if(cs.getInt(3) == 2){
+				JOptionPane.showMessageDialog(null, "System can not recognize the EID! Report to devolopers!");
+			} else if(cs.getInt(3) == 3){
+				JOptionPane.showMessageDialog(null, "An user can't sign up the same event more than once");
+			} else if(cs.getInt(3) == 10){
+				JOptionPane.showMessageDialog(null, "successed!");
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private boolean cancelSignEvent(int id){
+		CallableStatement cs = null;
+		try {
+			cs = this.c.prepareCall("{call CancleSignUp(?,?,?)}");
+			cs.setInt(1,id);
+			cs.setString(2, username);
+			cs.registerOutParameter(3, java.sql.Types.INTEGER);
+			cs.execute();
+			if(cs.getInt(3) == 1){
+				JOptionPane.showMessageDialog(null, "System can not recognize the username! Report to devolopers!");
+			} else if(cs.getInt(3) == 2){
+				JOptionPane.showMessageDialog(null, "System can not recognize the EID! Report to devolopers!");
+			} else if(cs.getInt(3) == 3){
+				JOptionPane.showMessageDialog(null, "The user didn't sign up the event");
+			} else if(cs.getInt(3) == 10){
 				JOptionPane.showMessageDialog(null, "successed!");
 				return true;
 			}
@@ -460,7 +492,7 @@ public class EventsPanel extends JPanel {
 				JOptionPane.showMessageDialog(null,"System can not recognize Event! Report to devolopers!");
 			} else if(cs.getInt(3) == 2){
 				JOptionPane.showMessageDialog(null,"No event can not be deleted!");
-			} else if(cs.getInt(3) == 0){
+			} else if(cs.getInt(3) == 10){
 				JOptionPane.showMessageDialog(null,"successed!");
 				return true;
 			}
@@ -476,6 +508,7 @@ public class EventsPanel extends JPanel {
 		String username;
 		int id;
 		JFrame f;
+		JButton b;
 		
 		public ButtonListener(EventsPanel p, JFrame f){
 			pan = p;
@@ -490,6 +523,12 @@ public class EventsPanel extends JPanel {
 			this.pan = p;
 			this.username = username;
 			this.id = id;
+		}
+		public ButtonListener(String username, int id, EventsPanel p, JButton b) {
+			this.pan = p;
+			this.username = username;
+			this.id = id;
+			this.b = b;
 		}
 
 		public void actionPerformed(ActionEvent arg0) {
@@ -517,7 +556,6 @@ public class EventsPanel extends JPanel {
 				else{
 					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), eventAspects.get(3));
 				}
-				f.setVisible(false);
 			} else if (arg0.getActionCommand().equals("delete this event")) {
 				System.out.println("delete!");
 				// call delete event sproc
@@ -532,8 +570,16 @@ public class EventsPanel extends JPanel {
 				}
 			} else if (arg0.getActionCommand().equals("sign up!")) {
 				// go sign up
-				signUpEvent(id);
-			} 
+				System.out.println("id: " + id);
+				boolean boo = signUpEvent(id);
+				if(boo)
+					b.setText("cancel");
+				
+			} else if (arg0.getActionCommand().equals("cancel")){
+				boolean boo = cancelSignEvent(id);
+				if(boo)
+					b.setText("sign up!");
+			}
 			pan.repaint();
 			pan.revalidate();
 		}
