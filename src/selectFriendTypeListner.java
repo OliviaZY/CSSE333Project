@@ -81,25 +81,13 @@ public class selectFriendTypeListner implements ActionListener {
 		typeGroup.add(boss);
 		typeGroup.add(mentor);
 
-//		bookName.setSelected(true);
 		enter.setBounds(300,350,100,30);
-		
-//		frame1.add(typeGroup);
+
+
 		frame1.add(enter);
 		frame1.add(verticalBox);
 		
-//		CallableStatement cs;
-//		try {
-//			cs = this.dbc.prepareCall("call acceptFriendRequest(?,?,?,?)");
-//			cs.setString(1, initialN);
-//			cs.setString(2, searchedN);
-//
-//			cs.registerOutParameter(4, java.sql.Types.INTEGER);
-//		} catch (SQLException exception) {
-//			// TODO Auto-generated catch-block stub.
-//			exception.printStackTrace();
-//		}
-		
+
 		enter.addActionListener(new ActionListener() {
 
 		    @Override
@@ -110,30 +98,11 @@ public class selectFriendTypeListner implements ActionListener {
 				new AcceptFriendRequestListener(selected,initialN, searchedN, dbc).actionPerformed(e);
 				
 		    }});
-	
-
-		
-		
-//		String[] friendType = { "parent", "coworker", "collegeMate", "relation", "fromSamePlace" };
-//		JComboBox<String> friendList = new JComboBox<>(friendType);
-//		JComboBox petList = new JComboBox(friendType);
-//		// petList.setSelectedIndex(4);
-//		petList.setBounds(300, 300, 100, 30);
-		// add to the parent container (e.g. a JFrame):
-//		frame1.add(petList);
-
-		// get the selected item:
-//		String selectedType = String.valueOf(petList.getSelectedItem());
-//		System.out.println("You seleted the type: " + selectedType);
-		
 		
 
 			frame1.validate();
 			frame1.setVisible(true);
-//		} catch (SQLException var13) {
-//			var13.printStackTrace();
-//			JOptionPane.showMessageDialog((Component) null, "Login Failed");
-//		}
+
 
 	}
 	

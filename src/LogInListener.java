@@ -93,14 +93,14 @@ public class LogInListener implements ActionListener {
 //					Box links = Box.createVerticalBox();
 //					JButton[] buttonLinks = new JButton[7];
 					buttonLinks[0] = new JButton("Profile");
-					buttonLinks[0].addActionListener(new ViewProfileListner(tf1.getText(),tf1,frame1,dbc,true));
+					buttonLinks[0].addActionListener(new ViewProfileListner(tf1.getText(),tf1.getText(),frame1,dbc,true));
 					buttonLinks[1] = new JButton("Friends");
-//					buttonLinks[1].addActionListener(new ViewFriendListListner(tf1,frame1,dbc));
+					buttonLinks[1].addActionListener(new ViewFriendListListner(tf1,frame1,dbc));
 					buttonLinks[2] = new JButton("Posts");
 					buttonLinks[3] = new JButton("Events");
 					buttonLinks[4] = new JButton("Interests");
 					buttonLinks[5] = new JButton("view a user's info");
-//					buttonLinks[5].addActionListener(new ViewOtherProfileListner(tf1.getText(),dbc));
+					buttonLinks[5].addActionListener(new ViewOtherProfileListner(tf1.getText(),dbc));
 					buttonLinks[6] = new JButton("add Posts");
 					buttonLinks[7] = new JButton("Recommendation");
 					buttonLinks[7].addActionListener(new RecommendationListner(tf1,frame1,dbc));

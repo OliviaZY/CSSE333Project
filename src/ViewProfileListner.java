@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 public class ViewProfileListner implements ActionListener {
 	private JFrame frame;
@@ -35,11 +34,11 @@ public class ViewProfileListner implements ActionListener {
 	static JLabel field;
 	
 	static String initalUName;
-	static JTextField searchedUName;
+	static String searchedUName;
 	boolean selfOrOther;
 	
 //	private String uname;
-	public ViewProfileListner(String initalUName, JTextField searchedUName, JFrame frame1, Connection dbc, boolean selfOrOther) {
+	public ViewProfileListner(String initalUName, String searchedUName, JFrame frame1, Connection dbc, boolean selfOrOther) {
 		this.frame = frame;
 		this.dbc = dbc;
 		this.initalUName = initalUName;
@@ -73,7 +72,7 @@ public class ViewProfileListner implements ActionListener {
 			if(selfOrOther){
 				cs.setString(1, initalUName);
 			}else{
-				cs.setString(1, searchedUName.getText());
+				cs.setString(1, searchedUName);
 			}
 			
 			cs.registerOutParameter(4, java.sql.Types.DATE);
@@ -234,8 +233,8 @@ public class ViewProfileListner implements ActionListener {
 					editProdile.addActionListener(new addProfileListner(initalUName, frame1,dbc));
 				}else{
 					System.out.println(initalUName);
-					System.out.println(searchedUName.getText());
-					addFriend.addActionListener(new addFriendListener(initalUName,searchedUName.getText(),frame1,dbc));
+					System.out.println(searchedUName);
+					addFriend.addActionListener(new addFriendListener(initalUName,searchedUName,frame1,dbc));
 				}
 				//frame1.add(changingPanel, BorderLayout.CENTER);
 //				frame1.add(links, BorderLayout.WEST);
