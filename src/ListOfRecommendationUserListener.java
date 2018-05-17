@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -77,9 +76,9 @@ public class ListOfRecommendationUserListener {
 			while (rs.next()) {
 				
 				System.out.println(i);
-				JLabel l1 = new JLabel(rs.getString(1));
+				JTextField l1 = new JTextField(rs.getString(1));
 //				buttonLinksDec[i].addActionListener(new declineFriendRequestListner(username.getText(),l1.getText(), frame1,dbc));
-				buttonLinksAcc[i].addActionListener(new ViewProfileListner(userN.getText(),l1.getText(),frame1,dbc,false));
+				buttonLinksAcc[i].addActionListener(new ViewProfileListner(userN.getText(),l1,frame1,dbc,false));
 
 //				System.out.println("this is a test for select the first row in the result set");
 				l1.setBounds(100, 300*i, 200, 30);
