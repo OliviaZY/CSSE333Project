@@ -48,6 +48,8 @@ import javax.swing.JOptionPane;
 				if (salt == null && hash.equals(password)){
 					return true;
 				}
+				if (salt == null && !hash.equals(password))
+					return false;
 				if (hashPassword(salt,password).equals(hash)){
 					return true; 
 				}
