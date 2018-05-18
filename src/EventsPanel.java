@@ -106,8 +106,6 @@ public class EventsPanel extends JPanel {
 
 		enterButton.addActionListener(new ButtonListener(this));
 		createEvent.addActionListener(new ButtonListener(this));
-//		prev.addActionListener(new ButtonListener(this));
-//		next.addActionListener(new ButtonListener(this));
 
 		this.add(searchbox, BorderLayout.WEST);
 		this.add(enterButton);
@@ -119,8 +117,6 @@ public class EventsPanel extends JPanel {
 		this.add(iExerciseCheck);
 		this.add(iMusicCheck);
 		this.add(createEvent);
-//		this.add(prev, BorderLayout.AFTER_LAST_LINE);
-//		this.add(next);
 		
 		// Create event view
 		rs = buildGeneralEventResultSet();
@@ -132,10 +128,27 @@ public class EventsPanel extends JPanel {
 		
 
 	}
-
-	private ArrayList<JPanel> eventView() {
-		JPanel view;
-		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
+	private String ifSignedUp(int eid, String uname){
+		String returnString = null;
+		CallableStatement cs = null;
+		try {
+			cs = this.c.prepareCall("{call ifSignedUp(?,?,?)}");
+			cs.setInt(1, eid);
+			cs.setString(2, uname);
+			cs.registerOutParameter(3, java.sql.Types.INTEGER);
+			cs.execute();
+			
+			if(cs.getInt(3) == 0) {
+				returnString = "sign up!";
+			}else{
+				returnString = "cancel";
+			}
+		} catch (SQLException e) {
+		}
+		return returnString;
+	}
+	
+	private void noResult(JPanel view, ArrayList<JPanel> tempP){
 		if (rs == null) {
 			view = new JPanel();
 			JLabel noResult = new JLabel("No result...");
@@ -144,6 +157,15 @@ public class EventsPanel extends JPanel {
 			noResult.setBounds(300, 300, 200, 30);
 			view.add(noResult);
 			tempP.add(view);
+		}
+	}
+	
+	
+	private ArrayList<JPanel> eventView() {
+		JPanel view = null;
+		ArrayList<JPanel> tempP = new ArrayList<JPanel>();
+		if (rs == null) {
+			noResult(view,tempP);
 		}
 		try {
 			while (rs != null && rs.next()) {
@@ -156,7 +178,8 @@ public class EventsPanel extends JPanel {
 				view.add(new JLabel("Address: " + rs.getString(3)));
 				// if this event is owned by user
 				JButton deleteEvent = new JButton("delete this event");
-				JButton followEvent = new JButton("sign up!");
+				String s = ifSignedUp(rs.getInt(5),username);
+				JButton followEvent = new JButton(s);
 				if (rs.getString(4).equals(this.username)) {
 					deleteEvent.addActionListener(new ButtonListener(username, rs.getInt(5), this));
 					view.add(deleteEvent);
@@ -268,10 +291,8 @@ public class EventsPanel extends JPanel {
 	 *            Holding address of the event
 	 * @return if the event is successfully created
 	 */
-
-	public boolean createEvent(String EventName, String Date, String Address, String interest) {
+	public boolean createEvent(String EventName, String Date, String Address) {
 		CallableStatement cs = null;
-		// check if the date is valid 
 		if(Date.length() != 10){
 			JOptionPane.showMessageDialog(null, "Please type in a valid date!");
 			return false;
@@ -287,8 +308,66 @@ public class EventsPanel extends JPanel {
 			}
 		}
 		try {
+			System.out.println("get in here ");
+			cs = this.c.prepareCall("{call CreateEvent(?,?,?,?,?)}");
+			cs.setString(1, EventName);
+			cs.setString(2, Date);
+			cs.setString(3, Address);
+			cs.setString(4, username);
+			cs.execute();
+			if (cs.getInt(5) == 1) {
+				JOptionPane.showMessageDialog(null, "ERROR: Event name cannot be null or empty");
+			}
+			else if (cs.getInt(5) == 2) {
+				JOptionPane.showMessageDialog(null, "ERROR: Holding date cannot be null or empty");
+			}
+			else if (cs.getInt(5) == 3) {
+				JOptionPane.showMessageDialog(null, "ERROR: Address cannot be null or empty");
+			}
+			else if (cs.getInt(5) == 4) {
+				JOptionPane.showMessageDialog(null,
+						"ERROR: System can't recognize the user. Please report this error massage to developers");
+			}else if (cs.getInt(5) == 6) {
+				JOptionPane.showMessageDialog(null, "ERROR: Invalid date!");
+			}
+			else if (cs.getInt(5) == 7) {
+				JOptionPane.showMessageDialog(null,
+						"ERROR: A user can't create two event which are hold at the same time");
+			}
+			else{
+				JOptionPane.showMessageDialog(null,"the event is created!");
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "ERROR: Invalid date!!!!!!!");
+		}
+		return false;
+	}
+
+	private boolean checkDateValid(String Date){
+		if(Date.length() != 10){
+			JOptionPane.showMessageDialog(null, "Please type in a valid date!");
+			return false;
+		}else{
+			for(int i = 0; i < Date.length(); i++){
+				if(Date.charAt(i) < '0' || Date.charAt(i) > '9'){
+					if(i == 4 || i == 7){
+						if(Date.charAt(i) == '-') continue;
+					}
+					JOptionPane.showMessageDialog(null, "Please type in a valid date!");
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean createEventByInterest(String EventName, String Date, String Address, String interest) {
+		CallableStatement cs = null;
+		// check if the date is valid 
+		if(!checkDateValid(Date)) return false; 
+		try {
 			
-			cs = this.c.prepareCall("{call CreateEvent(?,?,?,?,?,?,?)}");
+			cs = this.c.prepareCall("{call createEventByInterest(?,?,?,?,?,?,?)}");
 			cs.setString(1, EventName);
 			cs.setString(2, Date);
 			cs.setString(3, Address);
@@ -302,27 +381,23 @@ public class EventsPanel extends JPanel {
 				cs.setString(5, "Exercise");
 			else if (musicCheck.isSelected())
 				cs.setString(5, "Music");
-			else 
-				cs.setString(5, null);
-			
 			cs.setString(6, interest);
 			cs.registerOutParameter(7, java.sql.Types.INTEGER);
 			System.out.println(cs);
 			cs.execute();
 			if (cs.getInt(7) == 10) {
 				JOptionPane.showMessageDialog(null, "successfully created!");
-				
 			}
-			if (cs.getInt(7) == 1) {
+			else if (cs.getInt(7) == 1) {
 				JOptionPane.showMessageDialog(null, "ERROR: Event name cannot be null or empty");
 			}
-			if (cs.getInt(7) == 2) {
+			else if (cs.getInt(7) == 2) {
 				JOptionPane.showMessageDialog(null, "ERROR: Holding date cannot be null or empty");
 			}
-			if (cs.getInt(7) == 3) {
+			else if (cs.getInt(7) == 3) {
 				JOptionPane.showMessageDialog(null, "ERROR: Address cannot be null or empty");
 			}
-			if (cs.getInt(7) == 4) {
+			else if (cs.getInt(7) == 4) {
 				JOptionPane.showMessageDialog(null,
 						"ERROR: System can't recognize the user. Please report this error massage to developers");
 			}
@@ -342,7 +417,7 @@ public class EventsPanel extends JPanel {
 			}
 			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "ERROR: Invalid date!!!");
 			return false;
 		}
 
@@ -364,68 +439,57 @@ public class EventsPanel extends JPanel {
 		}
 		return rs;
 	}
-
+	
 	private ResultSet buildSearchResultSet() {
 		CallableStatement cs = null;
+		CallableStatement cs2= null;
 		ResultSet rs = null;
+		if(eDateCheck.isSelected() && !checkDateValid(searchbox.getText())){
+			return null;
+		}
 		try {
-			cs = this.c.prepareCall("{call SearchEvents(?,?,?,?,?,?,?,?,?,?)}");
-
+			cs = this.c.prepareCall("{call SearchEvents(?,?,?)}");
+			cs2 = this.c.prepareCall("{call SearchEventsByInterest(?,?,?)}");
+			
 			if (eNameCheck.isSelected()) {
 				cs.setString(1, this.searchbox.getText());
 				cs.setString(2, null);
 				cs.setString(3, null);
-				cs.setString(8, null);
-				cs.setString(9, null);
-
+				rs = cs.executeQuery();
 			} else if (eDateCheck.isSelected()) {
 				cs.setString(1, null);
 				cs.setString(2, this.searchbox.getText());
 				cs.setString(3, null);
-				cs.setString(8, null);
-				cs.setString(9, null);
-
+				rs = cs.executeQuery();
 			} else if (eAddressCheck.isSelected()) {
 				cs.setString(1, null);
 				cs.setString(2, null);
 				cs.setString(3, this.searchbox.getText());
-				cs.setString(8, null);
-				cs.setString(9, null);
-
+				rs = cs.executeQuery();
 			} else if (iAnimalCheck.isSelected()) {
-				cs.setString(1, null);
-				cs.setString(2, null);
-				cs.setString(3, null);
-				cs.setString(8, this.searchbox.getText());
-				cs.setString(9, "Animal");
+				cs2.setString(1, this.searchbox.getText());
+				cs2.setString(2, "Animal");
+				cs2.registerOutParameter(3, java.sql.Types.INTEGER);
+				rs = cs2.executeQuery();
 			} else if (iBookCheck.isSelected()) {
-				cs.setString(1, null);
-				cs.setString(2, null);
-				cs.setString(3, null);
-				cs.setString(8, this.searchbox.getText());
-				cs.setString(9, "Book");
+				cs2.setString(1, this.searchbox.getText());
+				cs2.setString(2, "Book");
+				cs2.registerOutParameter(3, java.sql.Types.INTEGER);
+				rs = cs2.executeQuery();
 			} else if (iExerciseCheck.isSelected()) {
-				cs.setString(1, null);
-				cs.setString(2, null);
-				cs.setString(3, null);
-				cs.setString(8, this.searchbox.getText());
-				cs.setString(9, "Exercise");
+				cs2.setString(1, this.searchbox.getText());
+				cs2.setString(2, "Exercise");
+				cs2.registerOutParameter(3, java.sql.Types.INTEGER);
+				rs = cs2.executeQuery();
 			} else if (iMusicCheck.isSelected()) {
-				cs.setString(1, null);
-				cs.setString(2, null);
-				cs.setString(3, null);
-				cs.setString(8, this.searchbox.getText());
-				cs.setString(9, "Music");
+				cs2.setString(1, this.searchbox.getText());
+				cs2.setString(2, "Music");
+				cs2.registerOutParameter(3, java.sql.Types.INTEGER);
+				rs = cs2.executeQuery();
 			} else {
 				JOptionPane.showMessageDialog(null, "Please check searching option!");
 				return null;
 			}
-			cs.registerOutParameter(4, java.sql.Types.VARCHAR);
-			cs.registerOutParameter(5, java.sql.Types.DATE);
-			cs.registerOutParameter(6, java.sql.Types.VARCHAR);
-			cs.registerOutParameter(7, java.sql.Types.VARCHAR);
-			cs.registerOutParameter(10, java.sql.Types.INTEGER);
-			rs = cs.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -444,9 +508,7 @@ public class EventsPanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "System can not recognize the username! Report to devolopers!");
 			} else if(cs.getInt(3) == 2){
 				JOptionPane.showMessageDialog(null, "System can not recognize the EID! Report to devolopers!");
-			} else if(cs.getInt(3) == 3){
-				JOptionPane.showMessageDialog(null, "An user can't sign up the same event more than once");
-			} else if(cs.getInt(3) == 10){
+			} else if(cs.getInt(3) == 0){
 				JOptionPane.showMessageDialog(null, "successed!");
 				return true;
 			}
@@ -468,8 +530,6 @@ public class EventsPanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "System can not recognize the username! Report to devolopers!");
 			} else if(cs.getInt(3) == 2){
 				JOptionPane.showMessageDialog(null, "System can not recognize the EID! Report to devolopers!");
-			} else if(cs.getInt(3) == 3){
-				JOptionPane.showMessageDialog(null, "The user didn't sign up the event");
 			} else if(cs.getInt(3) == 10){
 				JOptionPane.showMessageDialog(null, "successed!");
 				return true;
@@ -491,7 +551,7 @@ public class EventsPanel extends JPanel {
 			if(cs.getInt(3) == 1){
 				JOptionPane.showMessageDialog(null,"System can not recognize Event! Report to devolopers!");
 			} else if(cs.getInt(3) == 2){
-				JOptionPane.showMessageDialog(null,"No event can not be deleted!");
+				JOptionPane.showMessageDialog(null,"No event! Can not be deleted!");
 			} else if(cs.getInt(3) == 10){
 				JOptionPane.showMessageDialog(null,"successed!");
 				return true;
@@ -536,6 +596,11 @@ public class EventsPanel extends JPanel {
 				while (!e.isEmpty())
 					pan.remove(e.remove(0));
 				rs = buildSearchResultSet();
+				if(rs == null){
+					noResult(pan,e);
+					pan.repaint();
+					return;
+				}
 				e = eventView();
 				for (int i = 0; i < e.size(); i++) {
 					pan.add(e.get(i));
@@ -550,24 +615,16 @@ public class EventsPanel extends JPanel {
 					System.out.println("--" + temp.get(i).getText());
 				}
 				System.out.println("interest: " + eventAspects.get(3).equals("Name of the interest"));
-				if(eventAspects.get(3).length() == 0 || eventAspects.get(3).equals("Name of the interest"))
-					
-					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), null);
+				
+				if(aniCheck.isSelected() || bookCheck.isSelected() || exerCheck.isSelected() || musicCheck.isSelected())
+					createEventByInterest(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2),eventAspects.get(3));
 				else{
-					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2), eventAspects.get(3));
+					createEvent(eventAspects.get(0), eventAspects.get(1), eventAspects.get(2));
 				}
 			} else if (arg0.getActionCommand().equals("delete this event")) {
 				System.out.println("delete!");
 				// call delete event sproc
 				deleteFromDB(id);
-				// refresh the panel
-				while (!e.isEmpty())
-					pan.remove(e.remove(0));
-				rs = buildGeneralEventResultSet();
-				e = eventView();
-				for (int i = 0; i < e.size(); i++) {
-					pan.add(e.get(i));
-				}
 			} else if (arg0.getActionCommand().equals("sign up!")) {
 				// go sign up
 				System.out.println("id: " + id);
